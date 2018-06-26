@@ -19,8 +19,6 @@
 </template>
 
 <script>
-import { loadNaviFromDB, updateNaviDB } from "../helper/navi-helper";
-import { postRequest } from "../helper/api-helper";
 import { mapGetters, mapMutations } from "vuex";
 
 export default {

@@ -1,10 +1,15 @@
-
 <template>
   <div>
+    <div v-if="loading">
+      <br><i class="fa fa-spinner fa-pulse fa-3x"></i><br><br>Initializing Transaction...
+      <br>{{requestCompleted / requestCount * 100}} %<br><br>
+    </div>
+    <div v-else>
       <AppNavBar :data="navBarData"></AppNavBar>
       <AppBreadcrumbs :text="breadcrumbsText"></AppBreadcrumbs>
       <component :is="navBarData[transactionState.currentTabIndex].id"></component>
-      <AppActionTab :pertanyaanOnClick="pertanyaanOnClick" :kemaskiniOnClick="kemaskiniOnClick"></AppActionTab>
+    </div>
+    {{transactionState}}
   </div>
 </template>
 
@@ -12,13 +17,12 @@
 // initialize common functions and component
 // Dont Change this
 import Vue from "vue";
+import { soapRequest } from "../../helper/api-helper";
 import { mapGetters, mapMutations } from "vuex";
-
 var navBarData = [];
 
 // intialize tab component
-// Please add as much tab as needed here
-// TODO
+// TODO - Please add as much tab as needed here
 // Tab 1
 import T385150_T1 from "./T385150_T1";
 Vue.component("T385150_T1", T385150_T1);
@@ -37,14 +41,14 @@ navBarData.push({ id: "T385150_T3", label: "Tab 3 Punya Label" });
 /////////////////////////////////////////////////////////////////////////////////////////////
 // main component for this transaction
 export default {
-  name: "T385150",
+  name: "T385150", // TODO - change component name here
   data() {
     return {
-      breadcrumbsText: "Blaaa Blala Bla > T385150", // init text for the breadcrumbs
+      breadcrumbsText: "Blaaa Blala Bla > T385150", // TODO - change breadcrumbs text here
       navBarData: navBarData,
       loading: false,
-     
-      dbData: {}
+      requestCount: 2, // TODO - Set How many request will be done in 'loadDbData' function
+      requestCompleted: 0
     };
   },
   computed: {
@@ -52,21 +56,94 @@ export default {
       transactionState: "transactionState"
     })
   },
-  created() {
-    //TODO - Load DB Data here
+  mounted() {
+    this.init();
   },
   methods: {
+    init() {
+      // Do Not Change This
+      this.loading = true;
+      this.loadDbData(); // load DB data
+      this.transSetNavBarData(navBarData); // Set Nav Bar Data
+      this.initTabEnabled();
+    },
+    initTabEnabled() {
+      // TODO - set which tabs are enabled on first load
+      var tabEnabled = ["T385150_T1"];
+      this.transSetEnabledTab(tabEnabled);
+    },
+    loadDbData() {
+      soapRequest({
+        // TODO -- (SERVER) this is the name of the server procedure
+        method: "SsoapRef005Race",
+        // TODO - (IMPORT) this is parameter structure set in soap service
+        param: {},
+        // TODO - (EXPORT) this is response entity that we are expecting from soap service
+        responseEntity: "OutRef005Race",
+        success: data => {
+          // TODO - set the key of this data so that we can access it later
+          var dataKey = "ref_005_race";
+          this.loadSuccess(dataKey, data);
+        },
+        error: err => {
+          loadError(err);
+        }
+      });
+
+      soapRequest({
+        // TODO -- (SERVER) this is the name of the server procedure
+        method: "SsoapTbprParent",
+        // TODO - (IMPORT) this is parameter structure set in soap service
+        param: {
+          InTbprParent: {
+            BprHscNo: "000314011256"
+          }
+        },
+        // TODO - (EXPORT) this is response entity that we are expecting from soap service
+        responseEntity: "OutTbprParent",
+        success: data => {
+          // TODO - set the key of this data so that we can access it later
+          var dataKey = "tbpr_parent";
+          this.loadSuccess(dataKey, data);
+        },
+        error: err => {
+          loadError(err);
+        }
+      });
+    },
+    ////////////////////////////////////////////////////////////////////////////
+    // Do Not Change This
+    loadSuccess(key, data) {
+      this.transSetDbData({ key: key, data: data });
+      this.requestCompleted++;
+      if (this.requestCount == this.requestCompleted) {
+        this.loading = false;
+      }
+    },
     ...mapMutations({
       transChangeTab: "transChangeTab",
+      transSetEnabledTab: "transSetEnabledTab",
       transAddEnabledTab: "transAddEnabledTab",
-      transRemoveEnabledTab: "transRemoveEnabledTab"
-    }),
-    pertanyaanOnClick(){
-      console.log("do pertanyaan");
-    },
-    kemaskiniOnClick(){
-      console.log("do kemaskini");
-    }
+      transRemoveEnabledTab: "transRemoveEnabledTab",
+      transSetNavBarData: "transSetNavBarData",
+      transSetDbData: "transSetDbData"
+    })
   }
 };
+
+/*
+   soapRequest({
+        method: "SsoapTbprParent",
+        param: {
+          InTbprParent: {
+            BprHscNo: "000314011256"
+          }
+        },
+        responseEntity: "OutTbprParent",
+        success: data => {
+          this.loading = false;
+        },
+        error: err => {}
+      });
+*/
 </script>

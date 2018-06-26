@@ -11,7 +11,6 @@ registerTransaction(Vue);
 
 //register all component
 import JpnHeader from '@/components/JpnHeader'
-import JpnFooter from '@/components/JpnFooter'
 import JpnContent from '@/components/JpnContent'
 import ManageNavi from '@/components/ManageNavi'
 import TableData from '@/components/TableData'
@@ -22,7 +21,6 @@ import AppActionTab from '@/components/AppActionTab'
 import Form from '@/components/Form'
 
 Vue.component('JpnHeader', JpnHeader);
-Vue.component('JpnFooter', JpnFooter);
 Vue.component('JpnContent', JpnContent);
 Vue.component('ManageNavi', ManageNavi);
 Vue.component('TableData', TableData);

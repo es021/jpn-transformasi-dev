@@ -1,16 +1,27 @@
-
 <template>
   <div class="jpn-nav-bar">
-    <div @click="changeIndex(i)" 
-      :class="{active: i == transactionState.currentTabIndex}" 
-      class="jnv-item" v-for="(d,i) in data" :key="d.id">
-       <b>{{d.label}}</b>
+    <div>
+      <button @click="changeIndex(i)" 
+        :disabled="isTabDisabled(d.id)"
+        :class="{active: i == transactionState.currentTabIndex}" 
+        class="jnv-item" v-for="(d,i) in data" :key="d.id">
+        <b>{{d.label}}</b>
+      </button>
+    </div>  
+    <div>  
+      <button class="jnv-item" 
+        @click="changeIndex(transactionState.currentTabIndex - 1)" 
+        :disabled="!isPrevNextEnabled('prev')"><b>< PREV</b>
+      </button><button 
+        @click="changeIndex(transactionState.currentTabIndex + 1)" 
+        class="jnv-item" 
+        :disabled="!isPrevNextEnabled('next')"><b>NEXT ></b></button>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "AppNavBar",
@@ -28,13 +39,43 @@ export default {
       transactionState: "transactionState"
     })
   },
+
   methods: {
-    ...mapMutations({ transChangeTab: "transChangeTab" }),
+    ...mapMutations({
+      transChangeTab: "transChangeTab",
+      transSetNextEnabled: "transSetNextEnabled",
+      transSetPrevEnabled: "transSetPrevEnabled"
+    }),
     changeIndex(i) {
       if (this.currentTabIndex == i) {
         return;
       }
-      this.transChangeTab({ index: i });
+
+      if (i > this.data.length - 1) {
+        return;
+      }
+
+      if (i < 0) {
+        return;
+      }
+
+      this.transChangeTab(i);
+    },
+    isTabDisabled(id) {
+      return this.transactionState.tabEnabled.indexOf(id) <= -1;
+    },
+    isPrevNextEnabled(type) {
+      try {
+        var state = this.transactionState;
+        var nextIndex =
+          type == "next"
+            ? state.currentTabIndex + 1
+            : state.currentTabIndex - 1;
+        var nextId = state.navBarData[nextIndex].id;
+        return state.tabEnabled.indexOf(nextId) >= 0;
+      } catch (err) {
+        return false;
+      }
     }
   }
 };
@@ -43,6 +84,7 @@ export default {
 <style lang="scss">
 .jpn-nav-bar {
   display: flex;
+  justify-content: space-between;
   .jnv-item {
     // general
     padding: 10px;
@@ -64,7 +106,7 @@ export default {
     border-bottom-color: white;
   }
 
-  .jnv-item.disabled {
+  .jnv-item[disabled="disabled"] {
     cursor: not-allowed;
     color: #4a4a4a;
     background-color: #8f8f8f;

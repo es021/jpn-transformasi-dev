@@ -1,22 +1,33 @@
-// import axios from 'axios';
-// export function axiosGet(url) {
-//     return axios.get(url);
-// };
+//TODO soap request here
+import { SOAPClient, SOAPClientParameters } from './soap-helper';
+import { SoapUrl } from '../config/app-config';
 
+export function soapRequest({ method, param, responseEntity, success, error }) {
+    /*    
+    method : "SsoapTbprParent";
+    param : {
+        InTbprParent : {
+            BprHscNo : "000314011256"
+        }
+    }
+    responseEntity : "OutTbprParent";
+    success : function(data){}
+    error : function(err){}
+    */
 
-// if (typeof XMLHttpRequest === "undefined") {
-//     XMLHttpRequest = function () {
-//         try { return new ActiveXObject("Msxml2.XMLHTTP.6.0"); }
-//         catch (e) { }
-//         try { return new ActiveXObject("Msxml2.XMLHTTP.3.0"); }
-//         catch (e) { }
-//         try { return new ActiveXObject("Microsoft.XMLHTTP"); }
-//         catch (e) { }
-//         // Microsoft.XMLHTTP points to Msxml2.XMLHTTP and is redundant
-//         throw new Error("This browser does not support XMLHttpRequest.");
-//     };
-// }
+    var soapParam = new SOAPClientParameters(param);
+    SOAPClient.doSoap(SoapUrl, method, soapParam, responseEntity
+        , function (data) {
+            console.log(data);
+            success(data);
+        }, function (err) {
+            console.log("err", err);
+            error(err);
+        }
+    );
+}
 
+/*
 
 function serialize(obj, prefix) {
     var str = [],
@@ -67,3 +78,4 @@ export function postRequest(url, data, success, error) {
     xhttp.send(serialize(data));
 }
 
+*/
