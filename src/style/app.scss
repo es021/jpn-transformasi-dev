@@ -1,0 +1,107 @@
+@import "./define/_constant.scss";
+@import "./define/_mixin.scss";
+* {
+    word-break: keep-all !important;
+    overflow-wrap: break-word;
+
+    // to prevent padding go more than 100% width 
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+.break-all {
+    word-break: break-all !important;
+}
+
+html,
+body{
+    font-family: "Montserrat", Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+
+html {
+    height: 100%;
+    width: 100%;
+}
+
+body #app {
+    background: white;
+    margin: auto;
+    width: 100%;
+    max-width: 1200px;
+    min-height: 100%;
+}
+
+.jpn-header {
+    width: 100%;
+}
+
+.jpn-content {
+    padding: 10px;
+    //padding-left: $LEFT-WIDTH;
+    width: 100%;
+}
+
+.jpn-breadcrumbs{
+    text-align: left;
+}
+
+/*
+@media only screen and (min-width: 1000px) {
+    .primary-layout.landing-page {
+        header {
+            padding: 0 111px;
+        }
+    }
+}
+
+@media only screen and (max-width: $LAYOUT_MD) {
+    header,
+    .content,
+    footer {
+        padding-left: $LEFTBAR_MD_WIDTH;
+    }
+    left_bar {
+        width: $LEFTBAR_MD_WIDTH;
+    }
+    .content {
+        flex-flow: column;
+        .main {
+            padding: 15px;
+            flex: 1;
+        }
+        right_bar {
+            flex: 1;
+            min-height: 100px;
+            min-width: 100%;
+        }
+    }
+}
+
+
+
+@media only screen and (max-width: $LAYOUT_SM) {
+    header,
+    .content,
+    footer {
+        padding-left: 0;
+    } //hide left bar and position it under header bar
+    left_bar {
+        width: 100%;
+        height: $LEFTBAR_SM_HEIGHT;
+        top: $HEADER-HEIGHT);
+        z-index: 2;
+        @include flex
+        @include flex-align(center)
+    }
+    .content {
+        padding-top: $HEADER_HEIGHT + $LEFTBAR_SM_HEIGHT;
+        .main {
+            padding: 10px;
+        }
+    }
+
+}
+*/
