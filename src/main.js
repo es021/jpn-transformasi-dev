@@ -6,34 +6,40 @@ import router from './router'
 Vue.config.productionTip = false
 
 // register transaction here
-import {registerTransaction} from './transaction/_registerTransaction';
+import { registerTransaction } from './transaction/_registerTransaction';
 registerTransaction(Vue);
 
 //register all component
 import JpnHeader from '@/components/JpnHeader'
 import JpnContent from '@/components/JpnContent'
-import ManageNavi from '@/components/ManageNavi'
-import TableData from '@/components/TableData'
 import AppPopup from '@/components/AppPopup'
 import AppBreadcrumbs from '@/components/AppBreadcrumbs'
 import AppNavBar from '@/components/AppNavBar'
 import AppActionTab from '@/components/AppActionTab'
+import FormField from '@/components/FormField'
+import GroupBox from '@/components/GroupBox'
+
 import Form from '@/components/Form'
+import ManageNavi from '@/components/ManageNavi'
+import TableData from '@/components/TableData'
 
 Vue.component('JpnHeader', JpnHeader);
 Vue.component('JpnContent', JpnContent);
-Vue.component('ManageNavi', ManageNavi);
-Vue.component('TableData', TableData);
 Vue.component('AppPopup', AppPopup);
 Vue.component('AppBreadcrumbs', AppBreadcrumbs);
 Vue.component('AppNavBar', AppNavBar);
 Vue.component('AppActionTab', AppActionTab);
+Vue.component('FormField', FormField);
+Vue.component('GroupBox', GroupBox);
+
 Vue.component('Form', Form);
+Vue.component('ManageNavi', ManageNavi);
+Vue.component('TableData', TableData);
 
 //import all style
 const scss = ["app", "form", "button", "content"
   , "general", "header"
-  , "table", "popup"];
+  , "table", "popup", "form-field", "group-box"];
 
 scss.map((d, i) => {
   require(`./style/${d}.scss`);

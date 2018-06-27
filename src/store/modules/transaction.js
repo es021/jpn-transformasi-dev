@@ -2,12 +2,35 @@ const state = {
     tabEnabled: [], // store id of all tab that is enabled now
     navBarData: [], // store all tab in this transaction
     currentTabIndex: 0,
-    dbData: {}
+    dbData: {},
+    formData: {},
+    dataset: {
+        branch: [
+            { value: "01", label: "Cawangan HQ" },
+            { value: "02", label: "Cawangan Lain" }
+        ]
+    }
 }
 
 // getters
 const getters = {
     transactionState: state => state,
+    transactionDataset: state => state.dataset,
+    transactionCurrentTabId: (state) => {
+        try {
+            return state.navBarData[state.currentTabIndex].id
+        } catch (err) {
+            return null;
+        }
+    },
+    transactionFormDataValue: (state) => (tab, name) => {
+        //console.log("transactionFormDataValue", tab, name);
+        try {
+            return state.formData[tab][name];
+        } catch (err) {
+            return null;
+        }
+    }
 }
 
 // actions
@@ -44,6 +67,18 @@ const mutations = {
 
         state.dbData[key] = data;
 
+    },
+
+    transSaveFormData(state, { tab, name, value }) {
+        //console.log("transSaveFormData", tab, name, value);
+        if (typeof state.formData[tab] === "undefined") {
+            state.formData[tab] = {}
+        }
+
+        if (typeof state.formData[tab][name] === "undefined") {
+            state.formData[tab][name] = {}
+        }
+        state.formData[tab][name] = value;
     }
 }
 

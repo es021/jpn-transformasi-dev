@@ -56,6 +56,7 @@ export default {
 </script>
 <style lang="scss">
 .jpn-action-tab {
+  margin-top: 20px;
   display: flex;
   justify-content: space-between;
 }

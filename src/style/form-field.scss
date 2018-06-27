@@ -1,0 +1,46 @@
+@import './define/_constant.scss';
+
+.form-field{
+    text-align: left;
+    margin-bottom: 15px;
+    .ff-flex{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .ff-label{
+        flex-grow: 1;
+        color:$COLOR-BLUE;
+        margin-right: 10px;
+        max-width: 150px;
+    }
+
+    .ff-item{
+        flex-grow: 2;
+        input,select,div{
+            width: 100%;
+        }
+
+        .ff-error{
+            text-align: left;
+            color:$COLOR-RED;
+            font-size: 85%;
+        }
+
+        .radiobox-container,.checkbox-container{
+            input{
+                margin: 0;
+                margin-right: 10px;
+                width: auto;
+            }
+            display: flex;
+        }
+
+        .ffDisabled{
+            color:grey;
+        }
+    }
+
+   
+  }

@@ -7,7 +7,7 @@
     <div v-else>
       <AppNavBar :data="navBarData"></AppNavBar>
       <AppBreadcrumbs :text="breadcrumbsText"></AppBreadcrumbs>
-      <component :is="navBarData[transactionState.currentTabIndex].id"></component>
+      <component :is="transactionCurrentTabId"></component>
     </div>
     {{transactionState}}
   </div>
@@ -51,11 +51,7 @@ export default {
       requestCompleted: 0
     };
   },
-  computed: {
-    ...mapGetters({
-      transactionState: "transactionState"
-    })
-  },
+
   mounted() {
     this.init();
   },
@@ -73,6 +69,9 @@ export default {
       this.transSetEnabledTab(tabEnabled);
     },
     loadDbData() {
+      this.loading = false;
+      return;
+
       soapRequest({
         // TODO -- (SERVER) this is the name of the server procedure
         method: "SsoapRef005Race",
@@ -120,14 +119,17 @@ export default {
         this.loading = false;
       }
     },
-    ...mapMutations({
-      transChangeTab: "transChangeTab",
-      transSetEnabledTab: "transSetEnabledTab",
-      transAddEnabledTab: "transAddEnabledTab",
-      transRemoveEnabledTab: "transRemoveEnabledTab",
-      transSetNavBarData: "transSetNavBarData",
-      transSetDbData: "transSetDbData"
-    })
+    ...mapMutations([
+      "transChangeTab",
+      "transSetEnabledTab",
+      "transAddEnabledTab",
+      "transRemoveEnabledTab",
+      "transSetNavBarData",
+      "transSetDbData"
+    ])
+  },
+  computed: {
+    ...mapGetters(["transactionState", "transactionCurrentTabId"])
   }
 };
 
