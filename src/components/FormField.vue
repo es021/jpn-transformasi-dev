@@ -81,21 +81,26 @@ export default {
   },
   created() {
     this.tabId = this.transactionCurrentTabId;
+
+    // will return null if do not has any input yet
     var storeVal = this.getDataFromStore();
+
     this.value = this.getInitalValue(storeVal);
+
+    // if already has input then do validation again
+    if (storeVal !== null) {
+      this.doValidation();
+    }
   },
   methods: {
     onChange() {
       var value = this.getValue();
-      console.log("change", this.name, value);
-
-      // validate here
-      var err = this.validate(value);
-      if (err !== false) {
-        this.error = err;
-      } else {
-        this.error = false;
-      }
+      //console.log("change", this.name, value);
+      this.doValidation();
+    },
+    doValidation() {
+      var value = this.getValue();
+      this.error = this.validate(value);
     },
     getDataFromStore() {
       return this.transactionFormDataValue(this.tabId, this.name);
@@ -112,13 +117,18 @@ export default {
       if (this.isCheckbox()) {
         if (storeVal == null) {
           toRet = {};
-        }
-        toRet = {};
-        for (var i in storeVal) {
-          toRet[storeVal[i]] = true;
+        } else {
+          toRet = {};
+          for (var i in storeVal) {
+            toRet[storeVal[i]] = true;
+          }
         }
       } else {
-        toRet = storeVal;
+        if (storeVal == null) {
+          toRet = "";
+        } else {
+          toRet = storeVal;
+        }
       }
       return toRet;
     },
