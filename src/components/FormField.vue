@@ -4,24 +4,25 @@
     <div class="ff-flex">
       <div class="ff-label">{{label}}</div>
       <div class="ff-item">
-        <input @change="onChange" :disabled="disabled" v-model="value" v-if="isInput()" :type="type" :name="name" :placeholder="placeholder"/>
+        <input  v-if="isInput()" :ref="name" @change="onChange" :disabled="disabled" :value="value" :type="type" :name="name" :placeholder="placeholder"/>
 
-        <select @change="onChange" :disabled="disabled" v-model="value" v-if="isSelect()" :name="name">
+        <select v-if="isSelect()" :ref="name" @change="onChange" :disabled="disabled" :value="value" :name="name">
           <option v-for="(d,i) in dataset" :key="`${name}_${i}`" :value="d.value">
             {{d.label}}
           </option>
         </select>
 
-        <span v-if="isRadiobox()">
-           <div :class="{ffDisabled:disabled}" class="radiobox-container" v-for="(d,i) in dataset" :key="`${name}_${i}`">
-             <input :disabled="disabled" @change="onChange" type="radio" v-model="value" :value="d.value">
+         <span v-if="isRadiobox()">
+           <div v-for="(d,i) in dataset" :class="{ffDisabled:disabled}" class="radiobox-container" :key="`${name}_${i}`">
+             <input :disabled="disabled" @change="onChange" type="radio" :name="name" :ref="name" :value="d.value" :checked="d.value == value">
              <span>{{d.label}}</span>
            </div>
         </span>
 
         <span v-if="isCheckbox()">
-           <div :class="{ffDisabled:disabled}" class="checkbox-container" v-for="(d,i) in dataset" :key="`${name}_${i}`">
-             <input :disabled="disabled" @change="onChange" type="checkbox" v-model="value[d.label]">
+           <div v-for="(d,i) in dataset" :class="{ffDisabled:disabled}" class="checkbox-container"  :key="`${name}_${i}`">
+             <input :disabled="disabled" @change="onChange" type="checkbox" :name="name"  :ref="name" :value="d.value" 
+            :checked="valueArray.indexOf(d.value) >= 0">
              <span>{{d.label}}</span>
            </div>
         </span>
@@ -38,6 +39,16 @@ import { mapGetters, mapMutations } from "vuex";
 export default {
   name: "FormField",
   props: {
+    value: {
+      type: String, // {value:""}
+      default: null
+    },
+    valueArray: {
+      type: Array, // {value:""}
+      default: () => {
+        return [];
+      }
+    },
     type: {
       type: String
     },
@@ -68,81 +79,69 @@ export default {
       }
     }
   },
-  beforeDestroy() {
-    this.saveDataToStore();
+  // watch prop change
+  watch: {
+    value: {
+      handler: function(value, oldValue) {
+        this.onPropValueChange(value, oldValue);
+      }
+    },
+    valueArray: {
+      handler: function(value, oldValue) {
+        this.onPropValueChange(value, oldValue);
+      }
+    }
   },
   data() {
     return {
-      value: null,
       disabled: false,
       required: true,
-      error: false
+      error: false,
+      currentValue: null
     };
   },
   created() {
-    this.tabId = this.transactionCurrentTabId;
-
-    // will return null if do not has any input yet
-    var storeVal = this.getDataFromStore();
-
-    this.value = this.getInitalValue(storeVal);
-
-    // if already has input then do validation again
-    if (storeVal !== null) {
-      this.doValidation();
-    }
+    this.doValidation();
   },
   methods: {
+    onPropValueChange(value, oldValue) {
+      console.log("propchange", value, oldValue);
+      this.currentValue = value;
+      this.doValidation();
+    },
     onChange() {
-      var value = this.getValue();
-      //console.log("change", this.name, value);
+      console.log("onChange FormField");
+      var value = this.getRefValue();
+      this.currentValue = value;
+      this.$emit("onChange", this.name, value);
       this.doValidation();
     },
     doValidation() {
-      var value = this.getValue();
-      this.error = this.validate(value);
-    },
-    getDataFromStore() {
-      return this.transactionFormDataValue(this.tabId, this.name);
-    },
-    saveDataToStore() {
-      this.transSaveFormData({
-        tab: this.tabId,
-        name: this.name,
-        value: this.getValue()
-      });
-    },
-    getInitalValue(storeVal) {
-      var toRet = null;
-      if (this.isCheckbox()) {
-        if (storeVal == null) {
-          toRet = {};
-        } else {
-          toRet = {};
-          for (var i in storeVal) {
-            toRet[storeVal[i]] = true;
-          }
-        }
+      console.log("doValidation");
+      if (this.currentValue !== null) {
+        this.error = this.validate(this.currentValue);
       } else {
-        if (storeVal == null) {
-          toRet = "";
-        } else {
-          toRet = storeVal;
-        }
+        this.error = false;
       }
-      return toRet;
     },
-    getValue() {
+    getRefValue() {
+      var ref = this.$refs[this.name];
       var val = null;
       if (this.isCheckbox()) {
         val = [];
-        for (var key in this.value) {
-          if (this.value[key] == true) {
-            val.push(key);
+        for (var i in ref) {
+          if (ref[i].checked == true) {
+            val.push(ref[i].value);
+          }
+        }
+      } else if (this.isRadiobox()) {
+        for (var i in ref) {
+          if (ref[i].checked == true) {
+            val = ref[i].value;
           }
         }
       } else {
-        val = this.value;
+        val = ref.value;
       }
       return val;
     },
@@ -164,5 +163,26 @@ export default {
     ...mapGetters(["transactionCurrentTabId", "transactionFormDataValue"])
   }
 };
+
+// getInitalValue(storeVal) {
+//   var toRet = null;
+//   if (this.isCheckbox()) {
+//     if (storeVal == null) {
+//       toRet = {};
+//     } else {
+//       toRet = {};
+//       for (var i in storeVal) {
+//         toRet[storeVal[i]] = true;
+//       }
+//     }
+//   } else {
+//     if (storeVal == null) {
+//       toRet = "";
+//     } else {
+//       toRet = storeVal;
+//     }
+//   }
+//   return toRet;
+// },
 </script>
 

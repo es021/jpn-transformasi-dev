@@ -71,7 +71,7 @@ export default {
           type == "next"
             ? state.currentTabIndex + 1
             : state.currentTabIndex - 1;
-        var nextId = state.navBarData[nextIndex].id;
+        var nextId = state.tabData[nextIndex].id;
         return state.tabEnabled.indexOf(nextId) >= 0;
       } catch (err) {
         return false;

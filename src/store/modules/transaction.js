@@ -1,14 +1,18 @@
 const state = {
     tabEnabled: [], // store id of all tab that is enabled now
-    navBarData: [], // store all tab in this transaction
+    tabData: [], // store all tab in this transaction
     currentTabIndex: 0,
     dbData: {},
-    formData: {},
+    formValue: {},
     dataset: {
         branch: [
-            { value: "01", label: "Cawangan HQ" },
-            { value: "02", label: "Cawangan Lain" }
-        ]
+            { value: "Cawangan HQ", label: "Cawangan HQ" },
+            { value: "Cawangan Lain", label: "Cawangan Lain" }
+        ],
+        jantina: [
+            { value: "L", label: "Lelaki" },
+            { value: "P", label: "Perempuan" }
+        ],
     }
 }
 
@@ -18,17 +22,22 @@ const getters = {
     transactionDataset: state => state.dataset,
     transactionCurrentTabId: (state) => {
         try {
-            return state.navBarData[state.currentTabIndex].id
+            return state.tabData[state.currentTabIndex].id
         } catch (err) {
             return null;
         }
     },
-    transactionFormDataValue: (state) => (tab, name) => {
-        //console.log("transactionFormDataValue", tab, name);
+    transactionFormValue: (state) => (tab) => {
+        console.log("transactionFormValue", tab, name);
         try {
-            return state.formData[tab][name];
+            var toRet = state.formValue[tab];
+            if (typeof toRet === "undefined") {
+                return {};
+            } else {
+                return toRet;
+            }
         } catch (err) {
-            return null;
+            return {};
         }
     }
 }
@@ -57,8 +66,8 @@ const mutations = {
             state.tabEnabled.splice(index, 1);
         }
     },
-    transSetNavBarData(state, navBarData) {
-        state.navBarData = navBarData;
+    transSetTabData(state, tabData) {
+        state.tabData = tabData;
     },
     transSetDbData(state, { key, data }) {
         //var dbData = {};
@@ -69,16 +78,10 @@ const mutations = {
 
     },
 
-    transSaveFormData(state, { tab, name, value }) {
-        //console.log("transSaveFormData", tab, name, value);
-        if (typeof state.formData[tab] === "undefined") {
-            state.formData[tab] = {}
-        }
+    transSaveFormValue(state, { tab, formValue }) {
+        console.log("transSaveFormValue", tab, formValue);
+        state.formValue[tab] = formValue
 
-        if (typeof state.formData[tab][name] === "undefined") {
-            state.formData[tab][name] = {}
-        }
-        state.formData[tab][name] = value;
     }
 }
 

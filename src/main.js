@@ -13,6 +13,7 @@ registerTransaction(Vue);
 import JpnHeader from '@/components/JpnHeader'
 import JpnContent from '@/components/JpnContent'
 import AppPopup from '@/components/AppPopup'
+import AppDebug from '@/components/AppDebug'
 import AppBreadcrumbs from '@/components/AppBreadcrumbs'
 import AppNavBar from '@/components/AppNavBar'
 import AppActionTab from '@/components/AppActionTab'
@@ -26,6 +27,7 @@ import TableData from '@/components/TableData'
 Vue.component('JpnHeader', JpnHeader);
 Vue.component('JpnContent', JpnContent);
 Vue.component('AppPopup', AppPopup);
+Vue.component('AppDebug', AppDebug);
 Vue.component('AppBreadcrumbs', AppBreadcrumbs);
 Vue.component('AppNavBar', AppNavBar);
 Vue.component('AppActionTab', AppActionTab);

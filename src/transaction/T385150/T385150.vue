@@ -5,11 +5,13 @@
       <br>{{requestCompleted / requestCount * 100}} %<br><br>
     </div>
     <div v-else>
-      <AppNavBar :data="navBarData"></AppNavBar>
+      <AppNavBar :data="tabData"></AppNavBar>
       <AppBreadcrumbs :text="breadcrumbsText"></AppBreadcrumbs>
       <component :is="transactionCurrentTabId"></component>
     </div>
-    {{transactionState}}
+
+    <AppDebug></AppDebug>
+
   </div>
 </template>
 
@@ -19,24 +21,24 @@
 import Vue from "vue";
 import { soapRequest } from "../../helper/api-helper";
 import { mapGetters, mapMutations } from "vuex";
-var navBarData = [];
+var tabData = [];
 
 // intialize tab component
 // TODO - Please add as much tab as needed here
 // Tab 1
 import T385150_T1 from "./T385150_T1";
 Vue.component("T385150_T1", T385150_T1);
-navBarData.push({ id: "T385150_T1", label: "Tab 1 Punya Label" });
+tabData.push({ id: "T385150_T1", label: "Tab 1 Punya Label" });
 
 // Tab 2
 import T385150_T2 from "./T385150_T2";
 Vue.component("T385150_T2", T385150_T2);
-navBarData.push({ id: "T385150_T2", label: "Tab 2 Punya Label" });
+tabData.push({ id: "T385150_T2", label: "Tab 2 Punya Label" });
 
 // Tab 2
 import T385150_T3 from "./T385150_T3";
 Vue.component("T385150_T3", T385150_T3);
-navBarData.push({ id: "T385150_T3", label: "Tab 3 Punya Label" });
+tabData.push({ id: "T385150_T3", label: "Tab 3 Punya Label" });
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // main component for this transaction
@@ -45,7 +47,7 @@ export default {
   data() {
     return {
       breadcrumbsText: "Blaaa Blala Bla > T385150", // TODO - change breadcrumbs text here
-      navBarData: navBarData,
+      tabData: tabData,
       loading: false,
       requestCount: 2, // TODO - Set How many request will be done in 'loadDbData' function
       requestCompleted: 0
@@ -60,7 +62,7 @@ export default {
       // Do Not Change This
       this.loading = true;
       this.loadDbData(); // load DB data
-      this.transSetNavBarData(navBarData); // Set Nav Bar Data
+      this.transSetTabData(tabData); // Set Nav Bar Data
       this.initTabEnabled();
     },
     initTabEnabled() {
@@ -124,7 +126,7 @@ export default {
       "transSetEnabledTab",
       "transAddEnabledTab",
       "transRemoveEnabledTab",
-      "transSetNavBarData",
+      "transSetTabData",
       "transSetDbData"
     ])
   },
