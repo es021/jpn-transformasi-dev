@@ -2,11 +2,11 @@
 <template>
   <div class="form-field">
     <div class="ff-flex">
-      <div class="ff-label">{{label}}</div>
+      <div class="ff-label" :class="{empty:label==''}">{{label}}</div>
       <div class="ff-item">
-        <input  v-if="isInput()" :ref="name" @change="onChange" :disabled="disabled" :value="value" :type="type" :name="name" :placeholder="placeholder"/>
+        <input  v-if="isInput()" :ref="name" @change="onChange" :required="required" :disabled="disabled" :value="value" :type="type" :name="name" :placeholder="placeholder"/>
 
-        <select v-if="isSelect()" :ref="name" @change="onChange" :disabled="disabled" :value="value" :name="name">
+        <select v-if="isSelect()" :ref="name" @change="onChange" :required="required" :disabled="disabled" :value="value" :name="name">
           <option v-for="(d,i) in dataset" :key="`${name}_${i}`" :value="d.value">
             {{d.label}}
           </option>
@@ -14,14 +14,14 @@
 
          <span v-if="isRadiobox()">
            <div v-for="(d,i) in dataset" :class="{ffDisabled:disabled}" class="radiobox-container" :key="`${name}_${i}`">
-             <input :disabled="disabled" @change="onChange" type="radio" :name="name" :ref="name" :value="d.value" :checked="d.value == value">
+             <input :disabled="disabled" :required="required" @change="onChange" type="radio" :name="name" :ref="name" :value="d.value" :checked="d.value == value">
              <span>{{d.label}}</span>
            </div>
         </span>
 
         <span v-if="isCheckbox()">
            <div v-for="(d,i) in dataset" :class="{ffDisabled:disabled}" class="checkbox-container"  :key="`${name}_${i}`">
-             <input :disabled="disabled" @change="onChange" type="checkbox" :name="name"  :ref="name" :value="d.value" 
+             <input :disabled="disabled" :required="required" @change="onChange" type="checkbox" :name="name"  :ref="name" :value="d.value" 
             :checked="valueArray.indexOf(d.value) >= 0">
              <span>{{d.label}}</span>
            </div>
@@ -42,6 +42,14 @@ export default {
     value: {
       type: String, // {value:""}
       default: null
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    required: {
+      type: Boolean,
+      default: false
     },
     valueArray: {
       type: Array, // {value:""}
@@ -94,8 +102,6 @@ export default {
   },
   data() {
     return {
-      disabled: false,
-      required: true,
       error: false,
       currentValue: null
     };
@@ -105,19 +111,18 @@ export default {
   },
   methods: {
     onPropValueChange(value, oldValue) {
-      console.log("propchange", value, oldValue);
+      //console.log("propchange", value, oldValue);
       this.currentValue = value;
       this.doValidation();
     },
     onChange() {
-      console.log("onChange FormField");
+      //console.log("onChange FormField");
       var value = this.getRefValue();
       this.currentValue = value;
       this.$emit("onChange", this.name, value);
       this.doValidation();
     },
     doValidation() {
-      console.log("doValidation");
       if (this.currentValue !== null) {
         this.error = this.validate(this.currentValue);
       } else {

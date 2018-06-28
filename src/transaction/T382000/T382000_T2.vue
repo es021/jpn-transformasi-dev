@@ -13,7 +13,11 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
+import Vue from "vue";
+import * as ApiHelper from "../../helper/api-helper";
+import * as TabGeneralHelper from "../../helper/tab-general-helper";
+import Validate from "../../helper/validate-helper";
+
 export default {
   name: "T385150_T2",
   data() {
@@ -23,7 +27,6 @@ export default {
       pertanyaanOnClick: () => {
         //TODO
         console.log("do pertanyaan");
-
         this.transAddEnabledTab("T385150_T3");
       },
       kemaskiniOnClick: () => {
@@ -32,14 +35,21 @@ export default {
       }
     };
   },
-  created() {
-    //TODO - Load DB Data here
+  // to access form value via transactionFormValueByName has to be done in mounted
+  mounted() {
+    // this will get no_permohonana from first tab, T382000_T1
+    var noPermohonan = this.transactionFormValueByName(
+      "T382000_T1",
+      "no_permohonan"
+    );
+
+    console.log(noPermohonan);
   },
   methods: {
-    ...mapMutations({
-      transAddEnabledTab: "transAddEnabledTab",
-      transRemoveEnabledTab: "transRemoveEnabledTab"
-    })
+    ...TabGeneralHelper.getAllMethod()
+  },
+  computed: {
+    ...TabGeneralHelper.getAllComputed()
   }
 };
 </script>

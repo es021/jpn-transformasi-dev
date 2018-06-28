@@ -2,7 +2,59 @@
 import { SOAPClient, SOAPClientParameters } from './soap-helper';
 import { SoapUrl } from '../config/app-config';
 
-export function soapRequest({ method, param, responseEntity, success, error }) {
+export function loadRefTable(tables, progressHandler, errorHandler) {
+    if (typeof tables == "string") {
+        tables = [tables];
+    }
+    if (!Array.isArray(tables)) {
+        var err = "Parameter 'tables' is not of type array or string";
+        console.error("loadRefTable ", err);
+        if (errorHandler) {
+            errorHandler(err);
+        }
+        return;
+    }
+
+    function getMethod(tableName) {
+        var m = "Ssoap" + tableName;
+        return m;
+    }
+
+    function getResponseEntity(tableName) {
+        var m = "Out" + tableName;
+        return m;
+    }
+
+    for (var i in tables) {
+
+        let t = tables[i];
+        let tableName = t.table;
+        let tableField = t.field;
+        let method = getMethod(tableName);
+        let responseEntity = getResponseEntity(tableName);
+
+        soapRequest({
+            // TODO -- (SERVER) this is the name of the server procedure
+            method: method,
+            // TODO - (IMPORT) this is parameter structure set in soap service
+            param: {},
+            // TODO - (EXPORT) this is response entity that we are expecting from soap service
+            responseEntity: responseEntity,
+            // TODO - this is response field that we want to save, if empty array or null or undefined will take all
+            responseField: tableField,
+            success: data => {
+                // TODO - set the key of this data so that we can access it later
+                progressHandler(tableName, data);
+            },
+            error: err => {
+                loadError(err);
+            }
+        });
+    }
+
+}
+
+export function soapRequest({ method, param, responseEntity, responseField, success, error }) {
     /*    
     method : "SsoapTbprParent";
     param : {
@@ -16,7 +68,7 @@ export function soapRequest({ method, param, responseEntity, success, error }) {
     */
 
     var soapParam = new SOAPClientParameters(param);
-    SOAPClient.doSoap(SoapUrl, method, soapParam, responseEntity
+    SOAPClient.doSoap(SoapUrl, method, soapParam, responseEntity, responseField
         , function (data) {
             console.log(data);
             success(data);

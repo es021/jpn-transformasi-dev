@@ -1,13 +1,23 @@
 
 <template>
       <div>
-      -------------------------- 
-      DEBUG
-      --------------------------
-      <h3>Form Value In Store</h3>
+      <br><br>
+      ----------------------------------------------------------------------------------------- 
+      DEBUG STORE
+      -----------------------------------------------------------------------------------------
+      <h3>Form Value</h3>
       {{transactionState.formValue}}<br>
+      
+      <h3>Form Disabled</h3>
+      {{transactionState.formDisabled}}<br>
 
-      <h3>All Data In Store</h3>
+      <h3>Form Required</h3>
+      {{transactionState.formRequired}}<br>
+
+      <h3>Ref Table</h3>
+      {{transactionState.refTable}}<br>
+
+      <h3>All Data</h3>
       {{transactionState}}
 
       <br><br>

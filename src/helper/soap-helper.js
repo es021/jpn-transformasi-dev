@@ -84,12 +84,18 @@ var SOAPClientClass = function () {
 
 }
 
-SOAPClientClass.prototype.doSoap = function (url, method, param, responseEntity, successHandler, errHandler) {
+SOAPClientClass.prototype.doSoap = function (url, method, param, responseEntity, responseField, successHandler, errHandler) {
     SOAPClient.invoke(url, method, param, true, function (o, xmlRes) {
         var error = SOAPClient.getError(xmlRes);
         if (error !== null) {
             errHandler(error);
         } else {
+
+            if (responseField == null || typeof responseField == "undefined" || !Array.isArray(responseField)) {
+                responseField = [];
+            }
+            console.log(responseEntity);
+
             var data = [];
             var xmlResponse = xmlRes.documentElement;
             var fullNodeList = xmlResponse.getElementsByTagName(responseEntity);
@@ -100,6 +106,11 @@ SOAPClientClass.prototype.doSoap = function (url, method, param, responseEntity,
                 for (var j = 0; j < children.length; j++) {
                     var child = children[j];
                     var column = child.localName;
+
+                    if (responseField.length > 0 && responseField.indexOf(column) <= -1) {
+                        continue;
+                    }
+
                     var val = child.innerHTML;
                     d[column] = val;
                 }

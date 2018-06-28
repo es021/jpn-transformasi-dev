@@ -15,6 +15,13 @@ ValidateClass.prototype.isValidNumber = function (input) {
     return false;
 }
 
+ValidateClass.prototype.noPermohonan = function (input) {
+    if (input.length !== 24) {
+        return "No Permohanan must has length of 24. Given Length : " + input.length;
+    }
+    return false
+}
+
 ValidateClass.prototype.noKpt = function (input) {
     if (!Validate.isValidNumber(input)) {
         return "No KPT must only contain numbers";

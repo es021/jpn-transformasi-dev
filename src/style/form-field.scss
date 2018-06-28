@@ -16,14 +16,38 @@
         max-width: 150px;
     }
 
+    .ff-label.empty{
+        margin-right: 35px;
+    }
+
     .ff-item{
         flex-grow: 2;
-        input,select,div{
+        height: 25px;
+        input,select{
             width: 100%;
+            height: 100%;
+            border: solid 1px gray;
+            border-radius: 5px;
+            padding: 0px 5px;
+        }
+
+        input:required, select:required{
+            background: $COLOR-RED-LIGHT;
+            border: 1px $COLOR-RED-DARK solid;
+        }
+
+        input:disabled, select:disabled{
+            background: $COLOR-GRAY-LIGHT;
+            border: 1px gray solid;
+        }
+
+        input:focus, select:focus{
+            border: 2px $COLOR-BLUE solid;
         }
 
         .ff-error{
             text-align: left;
+            margin-top:3px;
             color:$COLOR-RED;
             font-size: 85%;
         }

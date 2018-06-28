@@ -2,8 +2,9 @@ const state = {
     tabEnabled: [], // store id of all tab that is enabled now
     tabData: [], // store all tab in this transaction
     currentTabIndex: 0,
-    dbData: {},
     formValue: {},
+    formDisabled: {},
+    formRequired: {},
     dataset: {
         branch: [
             { value: "Cawangan HQ", label: "Cawangan HQ" },
@@ -13,10 +14,57 @@ const state = {
             { value: "L", label: "Lelaki" },
             { value: "P", label: "Perempuan" }
         ],
+    },
+    refTable: {}
+}
+
+/// ########################################################
+/// HELPER FUNCTION 
+
+function refToSelectData(data, value, label) {
+    var toRet = [];
+    toRet.push({
+        value: "",
+        label: "--- SILA PILIH ---"
+    });
+    for (var i in data) {
+        var d = data[i];
+        toRet.push({
+            value: d[value],
+            label: d[label]
+        });
+    }
+    return toRet;
+}
+
+function getFormObject(state, key, tab) {
+    try {
+        var toRet = state[key][tab];
+        if (typeof toRet === "undefined") {
+            return {};
+        }
+        return toRet;
+    } catch (err) {
+        return {};
     }
 }
 
+function getFormObjectByName(state, key, tab, name) {
+    var data = getFormObject(state, key, tab);
+    try {
+        var toRet = data[name];
+        if (typeof toRet === "undefined") {
+            return null;
+        }
+        return toRet;
+    } catch (err) {
+        return null;
+    }
+}
+
+/// ########################################################
 // getters
+
 const getters = {
     transactionState: state => state,
     transactionDataset: state => state.dataset,
@@ -27,27 +75,34 @@ const getters = {
             return null;
         }
     },
-    transactionFormValue: (state) => (tab) => {
-        console.log("transactionFormValue", tab, name);
+    transactionRefTable: (state) => (name, { value, label }) => {
         try {
-            var toRet = state.formValue[tab];
+            var toRet = state.refTable[name];
             if (typeof toRet === "undefined") {
-                return {};
+                return [];
             } else {
+                if (typeof value !== "undefined" && typeof label !== "undefined") {
+                    toRet = refToSelectData(toRet, value, label);
+                }
                 return toRet;
             }
         } catch (err) {
-            return {};
+            return [];
         }
+    },
+    transactionFormValueByName: (state) => (tab, name) => {
+        return getFormObjectByName(state, "formValue", tab, name);
+    },
+    transactionFormObjectByName: (state) => (key, tab, name) => {
+        return getFormObjectByName(state, key, tab, name);
+    },
+    transactionFormObject: (state) => (key, tab) => {
+        return getFormObject(state, key, tab);
     }
 }
 
-// actions
-const actions = {
-
-}
-
-// mutations
+/// ########################################################
+// getters
 const mutations = {
     transChangeTab(state, index) {
         state.currentTabIndex = index;
@@ -69,20 +124,19 @@ const mutations = {
     transSetTabData(state, tabData) {
         state.tabData = tabData;
     },
-    transSetDbData(state, { key, data }) {
-        //var dbData = {};
-        //dbData[key] = data;
-        //state.dbData = Object.assign(state.dbData, dbData);
-
-        state.dbData[key] = data;
-
+    transSetRefTable(state, { key, data }) {
+        state.refTable[key] = data;
     },
-
-    transSaveFormValue(state, { tab, formValue }) {
-        console.log("transSaveFormValue", tab, formValue);
-        state.formValue[tab] = formValue
-
+    transSetFormObject(state, { key, tab, data }) {
+        //console.log("transSetFormValue", key, tab, data);
+        state[key][tab] = data;
     }
+}
+
+/// ########################################################
+// actions
+const actions = {
+
 }
 
 export default {
