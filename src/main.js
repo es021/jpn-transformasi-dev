@@ -9,6 +9,7 @@ Vue.config.productionTip = false
 import { registerTransaction } from './transaction/_registerTransaction';
 registerTransaction(Vue);
 
+
 //register all component
 import JpnHeader from '@/components/JpnHeader'
 import JpnContent from '@/components/JpnContent'
@@ -41,11 +42,12 @@ Vue.component('TableData', TableData);
 //import all style
 const scss = ["app", "form", "button", "content"
   , "general", "header"
-  , "table", "popup", "form-field", "group-box"];
+  , "table", "popup", "form-field", "group-box","pikaday"];
 
 scss.map((d, i) => {
   require(`./style/${d}.scss`);
 })
+
 
 const css = ["fontawesome-all.min"];
 css.map((d, i) => {

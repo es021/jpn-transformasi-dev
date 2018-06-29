@@ -46,6 +46,7 @@ export default {
       breadcrumbsText:
         "PENGANGKATAN >> BAYARAN >> 382000 >> BAYARAN PENGANGKATAN MELALUI PERINTAH MAHKAMAH",
       // TODO - load any ref table needed here
+     
       refTable: [
         {
           table: "Ref005Race", // TODO- set table name here using this format, dont use REF_005_RACE
@@ -56,6 +57,7 @@ export default {
           field: ["R007DocTypeCd", "R007DocTypeDesc"] // TODO set field that we want, if we want all just set to empty array, => []
         }
       ],
+     
       refTableCompleted: 0,
       tabData: tabData,
       loading: false

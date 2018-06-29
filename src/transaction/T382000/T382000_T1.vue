@@ -6,6 +6,16 @@
       <div class="app-row">
         <div class="app-col-full">
           <GroupBox title="Maklumat Kunci Carian">
+
+             <FormField type="date" 
+                    name="dateTest" 
+                    label="Date Test" 
+                    placeholder="" 
+                    :value="formValue['dateTest']"
+                    :disabled="formDisabled['dateTest']"
+                    :required="formRequired['dateTest']"
+                    @onChange="onChange"></FormField>
+
               <!-- Example for text field -->
               <FormField type="text" 
                 name="no_permohonan" 
@@ -139,12 +149,16 @@
       </div>
 
       </div>
-
+ <br><br>
+      {{this.formRef}}
+       <br><br>
       {{this.formValue}}
       <br>
       {{this.formDisabled}}
       <br>
       {{this.formRequired}}
+      <br><br>
+      {{this.formError}}
       <!-- this is action of our tab pertanyaan, kemaskini, etc -->
       <AppActionTab 
         :pertanyaanDisabled="pertanyaanDisabled"
@@ -159,7 +173,6 @@
 import Vue from "vue";
 import * as ApiHelper from "../../helper/api-helper";
 import * as TabGeneralHelper from "../../helper/tab-general-helper";
-import Validate from "../../helper/validate-helper";
 
 export default {
   name: "T382000_T1", // TODO - set name here same to this filename
@@ -171,12 +184,25 @@ export default {
       },
       //TODO - set pertanyaan on click event here
       pertanyaanOnClick: () => {
+        // check if no permohonan is sudah diisi
+        if (this.isFormValueEmpty("no_permohonan")) {
+          alert("No Permohonan diperlukan untuk membuat pertanyaan");
+          return;
+        }
+
+        // check if no permohonan ad error
+        if (this.isFormHasError("no_permohonan")) {
+          alert("No Permohonan tidak valid");
+          this.focusToFormField("no_permohonan");
+          return;
+        }
+
         // get tbaeAdoptExt by BaeAplNo
         ApiHelper.soapRequest({
           method: "SsoapTbaeAdoptExt",
           param: {
             InTbaeAdoptExt: {
-              BaeAplNo: this.formValue["no_permohonan"]
+              BaeAplNo: this.getFormValue("no_permohonan")
             }
           },
           responseEntity: "OutTbaeAdoptExt",
@@ -197,7 +223,13 @@ export default {
             this.transAddEnabledTab("T382000_T2");
           },
           error: err => {
-            alert("No Permohonan tidak wujud / tidak sah.");
+            if (err === "NOT_FOUND") {
+              alert("No Permohonan tidak wujud / tidak sah.");
+            } else {
+              alert(err);
+            }
+
+            this.transAddEnabledTab("T382000_T2");
           }
         });
       },
@@ -208,9 +240,7 @@ export default {
       },
 
       // Do Not Change This
-      formValue: {},
-      formDisabled: {},
-      formRequired: {},
+      ...TabGeneralHelper.getExtraData(),
       pertanyaanDisabled: false,
       kemaskiniDisabled: false
     };
@@ -221,13 +251,18 @@ export default {
 
   created() {
     // Do Not Change This
-    this.tabId = this.transactionCurrentTabId;
-    this.Validate = Validate;
+    this.startCreated();
 
-    // tabId need to be set first
-    this.formValue = this.getFormObjectFromStore("formValue");
-    this.formDisabled = this.getFormObjectFromStore("formDisabled");
-    this.formRequired = this.getFormObjectFromStore("formRequired");
+    // TODO
+    // set initial state of the input here
+
+    // to set as Disabled use the following
+    // this.setFormDisabled("name_of_the_input", true);
+
+    // to set as Required use the following
+    // this.setFormRequired("name_of_the_input", true);
+
+    this.setFormRequired("no_permohonan", true);
 
     this.setFormDisabled("no_kpt", true);
     this.setFormDisabled("no_dokumen", true);
@@ -241,9 +276,7 @@ export default {
     this.setFormDisabled("negeri", true);
   },
   beforeDestroy() {
-    this.setFormObjectToStore("formValue");
-    this.setFormObjectToStore("formDisabled");
-    this.setFormObjectToStore("formRequired");
+    this.startBeforeDestroy();
   },
   methods: {
     ...TabGeneralHelper.getAllMethod()

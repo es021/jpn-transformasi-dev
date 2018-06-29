@@ -1,10 +1,13 @@
 <!-- DO NOT CHANGE ANYTHING HERE -->
 <template>
-  <div class="form-field">
+  <div class="form-field" :class="{error:hasError()}">
     <div class="ff-flex">
       <div class="ff-label" :class="{empty:label==''}">{{label}}</div>
       <div class="ff-item">
-        <input  v-if="isInput()" :ref="name" @change="onChange" :required="required" :disabled="disabled" :value="value" :type="type" :name="name" :placeholder="placeholder"/>
+        
+        <input  v-if="isInput() || isDate()" :ref="name" @change="onChange" 
+        :required="required" :disabled="disabled" :value="value" :type="type" :name="name" 
+        :placeholder="placeholder"/>
 
         <select v-if="isSelect()" :ref="name" @change="onChange" :required="required" :disabled="disabled" :value="value" :name="name">
           <option v-for="(d,i) in dataset" :key="`${name}_${i}`" :value="d.value">
@@ -27,7 +30,7 @@
            </div>
         </span>
 
-        <div v-if="error !== false" class="ff-error">{{error}}</div>
+        <div v-if="hasError()" class="ff-error">{{error}}</div>
       </div>
     </div>
   </div>
@@ -35,6 +38,8 @@
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
+import Pikaday from "pikaday";
+import Validate from "../helper/validate-helper";
 
 export default {
   name: "FormField",
@@ -109,22 +114,62 @@ export default {
   created() {
     this.doValidation();
   },
+  mounted() {
+    //
+    if (this.isDate()) {
+      this.addCalendar(this.$refs[this.name]);
+    }
+
+    // check error in store
+    // before destroy tab must save in store
+    this.$emit("onChange", this.name, null, null, this.$refs[this.name]);
+  },
   methods: {
+    hasError() {
+      return this.error !== false;
+    },
     onPropValueChange(value, oldValue) {
       //console.log("propchange", value, oldValue);
       this.currentValue = value;
       this.doValidation();
     },
+    addCalendar(el) {
+      try {
+        if (el != null && typeof el !== "undefined") {
+          var picker = new Pikaday({
+            field: el,
+            format: "DD/MM/YYYY",
+            onOpen: function() {},
+            onSelect: function() {}
+          });
+        }
+      } catch (err) {
+        console.log("addCalendar err", err);
+      }
+    },
+
     onChange() {
-      //console.log("onChange FormField");
       var value = this.getRefValue();
+      console.log("onChange FormField", value);
+
       this.currentValue = value;
-      this.$emit("onChange", this.name, value);
       this.doValidation();
+
+      this.$emit(
+        "onChange",
+        this.name,
+        this.currentValue,
+        this.error,
+        this.$refs[this.name]
+      );
     },
     doValidation() {
       if (this.currentValue !== null) {
-        this.error = this.validate(this.currentValue);
+        if (this.isDate()) {
+          this.error = Validate.checkDate(this.currentValue);
+        } else {
+          this.error = this.validate(this.currentValue);
+        }
       } else {
         this.error = false;
       }
@@ -151,7 +196,10 @@ export default {
       return val;
     },
     isInput() {
-      return ["text", "number", "date"].indexOf(this.type) >= 0;
+      return ["text", "number"].indexOf(this.type) >= 0;
+    },
+    isDate() {
+      return this.type == "date";
     },
     isSelect() {
       return this.type == "select";
@@ -168,26 +216,5 @@ export default {
     ...mapGetters(["transactionCurrentTabId", "transactionFormDataValue"])
   }
 };
-
-// getInitalValue(storeVal) {
-//   var toRet = null;
-//   if (this.isCheckbox()) {
-//     if (storeVal == null) {
-//       toRet = {};
-//     } else {
-//       toRet = {};
-//       for (var i in storeVal) {
-//         toRet[storeVal[i]] = true;
-//       }
-//     }
-//   } else {
-//     if (storeVal == null) {
-//       toRet = "";
-//     } else {
-//       toRet = storeVal;
-//     }
-//   }
-//   return toRet;
-// },
 </script>
 
