@@ -23,9 +23,10 @@ export function getMutations() {
         "transSetEnabledTab",
         "transAddEnabledTab",
         "transRemoveEnabledTab",
-        "transSetTabData",
-        "transSetRefTable",
-        "transSetFormObject"
+        "transSetTabData", // tabData
+        "transSetRefTable", // { key, data }
+        "transSetFormObject", // { key, tab, data }
+        "transSetFormObjectByName" // { key, tab, name, data }
     ];
 }
 
@@ -48,11 +49,22 @@ export function getAllComputed() {
 
 export function getAllMethod() {
     return {
+        setThisData(key, name, value) {
+            var tab = this.tabId;
 
+            // first time not in store yet
+            if (this.transactionFormObjectByName(key, tab, name) == null) {
+                this.$set(this[key], name, value)
+            }
+            // recreate from store
+            else {
+                this.transSetFormObjectByName({ key: key, tab: tab, name: name, data: value })
+            }
+        },
         // #########################################################################
         // Functions For Form Value
         setFormValue(name, value) {
-            Vue.set(this.formValue, name, value);
+            this.setThisData("formValue", name, value)
         },
         getFormValue(name) {
             return this.formValue[name];
@@ -67,7 +79,7 @@ export function getAllMethod() {
         // #########################################################################
         // Functions For Form Error
         setFormError(name, error) {
-            Vue.set(this.formError, name, error);
+            this.setThisData("formError", name, error)
         },
         getFormError(name) {
             return this.formError[name];
@@ -83,15 +95,15 @@ export function getAllMethod() {
         // #########################################################################
         // Functions For Form Ref
         setFormRef(name, ref) {
-            Vue.set(this.formRef, name, ref);
+            this.setThisData("formRef", name, ref)
         },
         getFormRef(name) {
             return this.formRef[name];
         },
         focusToFormField(name) {
-            console.log("focusToFormField")
+            //console.log("focusToFormField")
             var ref = this.getFormRef(name);
-            console.log(ref);
+            //console.log(ref);
             ref.focus();
         },
         // #########################################################################
@@ -101,7 +113,7 @@ export function getAllMethod() {
                 // set required to false first
                 this.setFormRequired(name, false);
             }
-            Vue.set(this.formDisabled, name, bool);
+            this.setThisData("formDisabled", name, bool)
         },
 
         // #########################################################################
@@ -111,13 +123,13 @@ export function getAllMethod() {
                 // set disabled to false first
                 this.setFormDisabled(name, false);
             }
-            Vue.set(this.formRequired, name, bool);
+            this.setThisData("formRequired", name, bool)
         },
 
         // #########################################################################
         // Other function
         onChange(name, value, error, ref) {
-            console.log("onChange parent", name, value, error);
+            //console.log("onChange parent", name, value, error);
 
             if (value !== null && typeof value !== "undefined") {
                 this.setFormValue(name, value);
@@ -143,10 +155,10 @@ export function getAllMethod() {
         // #########################################################################
         // Hook
         startCreated() {
+            // tabId need to be set first
             this.tabId = this.transactionCurrentTabId;
             this.Validate = Validate;
 
-            // tabId need to be set first
             this.formValue = this.getFormObjectFromStore("formValue");
             this.formDisabled = this.getFormObjectFromStore("formDisabled");
             this.formRequired = this.getFormObjectFromStore("formRequired");

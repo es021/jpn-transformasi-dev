@@ -7,12 +7,12 @@ var ValidateClass = function () {
 }
 // common function put here
 function isValidNumber(input) {
-    var num = Number.parseInt(input);
-    var numText = num + "";
-    if (!Number.isNaN(num)) {
-        return true;
+    // var num = Number.parseInt(input);
+    // var numText = num + "";
+    if (isNaN(input)) {
+        return false;
     }
-    return false;
+    return true;
 }
 
 

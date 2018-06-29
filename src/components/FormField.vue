@@ -5,9 +5,15 @@
       <div class="ff-label" :class="{empty:label==''}">{{label}}</div>
       <div class="ff-item">
         
-        <input  v-if="isInput() || isDate()" :ref="name" @change="onChange" 
-        :required="required" :disabled="disabled" :value="value" :type="type" :name="name" 
-        :placeholder="placeholder"/>
+        <input  v-if="isInput()" :ref="name" @change="onChange" 
+          :required="required" :disabled="disabled" :value="value" :type="type" :name="name" 
+          :placeholder="placeholder"/>
+
+        <!-- type we use input because we already use pickaday lib !-->
+        <!-- if we use type date here will mess up state apa ntah -->
+         <input  v-if="isDate()" :ref="name" @change="onChange" 
+          :required="required" :disabled="disabled" :value="value" type="input" :name="name" 
+          :placeholder="placeholder"/>
 
         <select v-if="isSelect()" :ref="name" @change="onChange" :required="required" :disabled="disabled" :value="value" :name="name">
           <option v-for="(d,i) in dataset" :key="`${name}_${i}`" :value="d.value">
@@ -115,13 +121,16 @@ export default {
     this.doValidation();
   },
   mounted() {
-    //
     if (this.isDate()) {
       this.addCalendar(this.$refs[this.name]);
     }
 
-    // check error in store
-    // before destroy tab must save in store
+    // // check error in store and initialize
+    this.error = this.transactionFormErrorByName(
+      this.transactionCurrentTabId,
+      this.name
+    );
+
     this.$emit("onChange", this.name, null, null, this.$refs[this.name]);
   },
   methods: {
@@ -213,7 +222,11 @@ export default {
     ...mapMutations(["transSaveFormData"])
   },
   computed: {
-    ...mapGetters(["transactionCurrentTabId", "transactionFormDataValue"])
+    ...mapGetters([
+      "transactionCurrentTabId",
+      "transactionFormDataValue",
+      "transactionFormErrorByName"
+    ])
   }
 };
 </script>

@@ -5,6 +5,7 @@ const state = {
     formValue: {},
     formDisabled: {},
     formRequired: {},
+    formError: {},
     dataset: {
         branch: [
             { value: "Cawangan HQ", label: "Cawangan HQ" },
@@ -90,6 +91,9 @@ const getters = {
             return [];
         }
     },
+    transactionFormErrorByName: (state) => (tab, name) => {
+        return getFormObjectByName(state, "formError", tab, name);
+    },
     transactionFormValueByName: (state) => (tab, name) => {
         return getFormObjectByName(state, "formValue", tab, name);
     },
@@ -130,6 +134,10 @@ const mutations = {
     transSetFormObject(state, { key, tab, data }) {
         //console.log("transSetFormValue", key, tab, data);
         state[key][tab] = data;
+    },
+    transSetFormObjectByName(state, { key, tab, name, data }) {
+        //console.log("transSetFormValue", key, tab, data);
+        state[key][tab][name] = data;
     }
 }
 

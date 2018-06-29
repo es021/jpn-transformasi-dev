@@ -7,6 +7,9 @@
       -----------------------------------------------------------------------------------------
       <h3>Form Value</h3>
       {{transactionState.formValue}}<br>
+
+      <h3>Form Error</h3>
+      {{transactionState.formError}}<br>
       
       <h3>Form Disabled</h3>
       {{transactionState.formDisabled}}<br>

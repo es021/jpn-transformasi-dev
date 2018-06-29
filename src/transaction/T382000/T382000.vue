@@ -29,12 +29,12 @@ var tabData = [];
 // Tab 1
 import T382000_T1 from "./T382000_T1";
 Vue.component("T382000_T1", T382000_T1);
-tabData.push({ id: "T382000_T1", label: "Tab 1 Punya Label" });
+tabData.push({ id: "T382000_T1", label: "Permohonan" });
 
 // Tab 2
 import T382000_T2 from "./T382000_T2";
 Vue.component("T382000_T2", T382000_T2);
-tabData.push({ id: "T382000_T2", label: "Tab 2 Punya Label" });
+tabData.push({ id: "T382000_T2", label: "Bayaran" });
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // main component for this transaction
@@ -46,7 +46,7 @@ export default {
       breadcrumbsText:
         "PENGANGKATAN >> BAYARAN >> 382000 >> BAYARAN PENGANGKATAN MELALUI PERINTAH MAHKAMAH",
       // TODO - load any ref table needed here
-     
+
       refTable: [
         {
           table: "Ref005Race", // TODO- set table name here using this format, dont use REF_005_RACE
@@ -57,7 +57,8 @@ export default {
           field: ["R007DocTypeCd", "R007DocTypeDesc"] // TODO set field that we want, if we want all just set to empty array, => []
         }
       ],
-     
+
+      // Do Not Change This
       refTableCompleted: 0,
       tabData: tabData,
       loading: false

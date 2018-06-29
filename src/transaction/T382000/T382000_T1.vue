@@ -1,172 +1,222 @@
 
 <template>
-  <div>
+<div>
 
-      <!-- this is where the form field is put in our tab -->
-      <div class="app-row">
-        <div class="app-col-full">
-          <GroupBox title="Maklumat Kunci Carian">
-
-             <FormField type="date" 
-                    name="dateTest" 
-                    label="Date Test" 
-                    placeholder="" 
-                    :value="formValue['dateTest']"
-                    :disabled="formDisabled['dateTest']"
-                    :required="formRequired['dateTest']"
-                    @onChange="onChange"></FormField>
-
-              <!-- Example for text field -->
-              <FormField type="text" 
-                name="no_permohonan" 
-                label="No Permohonanan" 
-                placeholder="" 
-                :value="formValue['no_permohonan']"
-                :disabled="formDisabled['no_permohonan']"
-                :required="formRequired['no_permohonan']"
-                :validate="Validate.noPermohonan"
-                @onChange="onChange" ></FormField>
-          </GroupBox>
-
-          <GroupBox title="Maklumat Pemohon">
+    <!-- this is where the form field is put in our tab -->
+    <div class="app-row">
+      <div class="app-col-full">
+        <GroupBox title="Maklumat Kunci Carian">
+            <!-- Example for text field -->
             <FormField type="text" 
-              name="no_kpt" 
-              label="No KPT" 
+              name="no_permohonan" 
+              label="No Permohonanan" 
               placeholder="" 
-              :value="formValue['no_kpt']"
-              :disabled="formDisabled['no_kpt']"
-              :required="formRequired['no_kpt']"
-              @onChange="onChange"></FormField>
+              :value="formValue['no_permohonan']"
+              :disabled="formDisabled['no_permohonan']"
+              :required="formRequired['no_permohonan']"
+              :validate="Validate.noPermohonan"
+              @onChange="onChange" ></FormField>
+        </GroupBox>
+
+        <GroupBox title="Maklumat Pemohon">
+          <FormField type="text" 
+            name="no_kpt" 
+            label="No KPT" 
+            placeholder="" 
+            :value="formValue['no_kpt']"
+            :disabled="formDisabled['no_kpt']"
+            :required="formRequired['no_kpt']"
+            @onChange="onChange"></FormField>
+
+          <FormField type="text" 
+            name="no_dokumen" 
+            label="No Dokumen" 
+            placeholder="" 
+            :value="formValue['no_dokumen']"
+            :disabled="formDisabled['no_dokumen']"
+            :required="formRequired['no_dokumen']"
+            @onChange="onChange"></FormField>
+
+          <FormField type="select" 
+            name="jenis_dokumen" 
+            label="Jenis Dokumen" 
+            :dataset="transactionRefTable('Ref007DocumentType',{value:'R007DocTypeCd',label:'R007DocTypeDesc'})"
+            :value="formValue['jenis_dokumen']"
+            :disabled="formDisabled['jenis_dokumen']"
+              :required="formRequired['jenis_dokumen']"
+            @onChange="onChange"></FormField>
 
             <FormField type="text" 
-              name="no_dokumen" 
-              label="No Dokumen" 
+              name="nama_pemohon" 
+              label="Nama Pemohon" 
               placeholder="" 
-              :value="formValue['no_dokumen']"
-              :disabled="formDisabled['no_dokumen']"
-              :required="formRequired['no_dokumen']"
+              :value="formValue['nama_pemohon']"
+              :disabled="formDisabled['nama_pemohon']"
+              :required="formRequired['nama_pemohon']"
               @onChange="onChange"></FormField>
 
-            <FormField type="select" 
-              name="jenis_dokumen" 
-              label="Jenis Dokumen" 
-              :dataset="transactionRefTable('Ref007DocumentType',{value:'R007DocTypeCd',label:'R007DocTypeDesc'})"
-              :value="formValue['jenis_dokumen']"
-              :disabled="formDisabled['jenis_dokumen']"
-                :required="formRequired['jenis_dokumen']"
-              @onChange="onChange"></FormField>
+            <div class="app-row">
+              <div class="app-col-left">
 
-              <FormField type="text" 
-                name="nama_pemohon" 
-                label="Nama Pemohon" 
-                placeholder="" 
-                :value="formValue['nama_pemohon']"
-                :disabled="formDisabled['nama_pemohon']"
-                :required="formRequired['nama_pemohon']"
-                @onChange="onChange"></FormField>
+                <FormField type="text" 
+                  name="alamat_1" 
+                  label="Alamat" 
+                  placeholder="" 
+                  :value="formValue['alamat_1']"
+                  :disabled="formDisabled['alamat_1']"
+                  :required="formRequired['alamat_1']"
+                  @onChange="onChange"></FormField>
 
-              <div class="app-row">
-                <div class="app-col-left">
-                  
-                  <FormField type="text" 
-                    name="alamat_1" 
-                    label="Alamat" 
-                    placeholder="" 
-                    :value="formValue['alamat_1']"
-                    :disabled="formDisabled['alamat_1']"
-                    :required="formRequired['alamat_1']"
-                    @onChange="onChange"></FormField>
+                <FormField type="text" 
+                  name="alamat_2" 
+                  label="" 
+                  placeholder="" 
+                  :value="formValue['alamat_2']"
+                  :disabled="formDisabled['alamat_2']"
+                  :required="formRequired['alamat_2']"
+                  @onChange="onChange"></FormField>
 
-                  <FormField type="text" 
-                    name="alamat_2" 
-                    label="" 
-                    placeholder="" 
-                    :value="formValue['alamat_2']"
-                    :disabled="formDisabled['alamat_2']"
-                    :required="formRequired['alamat_2']"
-                    @onChange="onChange"></FormField>
-
-                  <FormField type="text" 
-                    name="alamat_3" 
-                    label="" 
-                    placeholder="" 
-                    :value="formValue['alamat_3']"
-                    :disabled="formDisabled['alamat_3']"
-                    :required="formRequired['alamat_3']"
-                    @onChange="onChange"></FormField>
-                </div>
-
-                <div class="app-col-right">
-                  <FormField type="number" 
-                    name="poskod" 
-                    label="Poskod" 
-                    placeholder="" 
-                    :value="formValue['poskod']"
-                    :disabled="formDisabled['poskod']"
-                    :required="formRequired['poskod']"
-                    @onChange="onChange"></FormField>
-
-                  <FormField type="text" 
-                    name="bandar" 
-                    label="Bandar" 
-                    placeholder="" 
-                    :value="formValue['bandar']"
-                    :disabled="formDisabled['bandar']"
-                    :required="formRequired['bandar']"
-                    @onChange="onChange"></FormField>
-
-                  <FormField type="text" 
-                    name="negeri" 
-                    label="Negeri" 
-                    placeholder="" 
-                    :value="formValue['negeri']"
-                    :disabled="formDisabled['negeri']"
-                    :required="formRequired['negeri']"
-                    @onChange="onChange"></FormField>
-                </div>
-
+                <FormField type="text" 
+                  name="alamat_3" 
+                  label="" 
+                  placeholder="" 
+                  :value="formValue['alamat_3']"
+                  :disabled="formDisabled['alamat_3']"
+                  :required="formRequired['alamat_3']"
+                  @onChange="onChange"></FormField>
               </div>
 
-          </GroupBox>
+              <div class="app-col-right">
+                <FormField type="number" 
+                  name="poskod" 
+                  label="Poskod" 
+                  placeholder="" 
+                  :value="formValue['poskod']"
+                  :disabled="formDisabled['poskod']"
+                  :required="formRequired['poskod']"
+                  @onChange="onChange"></FormField>
 
-         <GroupBox title="Example" v-if="false">
-            <!-- Example for radiobox -->
-            <FormField type="radiobox" 
-              name="jantina" 
-              label="Jantina" 
-              :value="formValue['jantina']" 
-              :dataset="transactionDataset['jantina']"
-              @onChange="onChange"></FormField>
-            
-            <!-- Example for checkbox -->
-            <FormField type="checkbox" 
-              name="dokumen" 
-              label="Dokumen" 
-              :valueArray="formValue['dokumen']"
-              :dataset="transactionDataset['branch']"
-              @onChange="onChange"></FormField>
-          </GroupBox>
-      </div>
+                <FormField type="text" 
+                  name="bandar" 
+                  label="Bandar" 
+                  placeholder="" 
+                  :value="formValue['bandar']"
+                  :disabled="formDisabled['bandar']"
+                  :required="formRequired['bandar']"
+                  @onChange="onChange"></FormField>
 
-      </div>
- <br><br>
-      {{this.formRef}}
-       <br><br>
-      {{this.formValue}}
-      <br>
-      {{this.formDisabled}}
-      <br>
-      {{this.formRequired}}
-      <br><br>
-      {{this.formError}}
-      <!-- this is action of our tab pertanyaan, kemaskini, etc -->
-      <AppActionTab 
-        :pertanyaanDisabled="pertanyaanDisabled"
-        :kemaskiniDisabled="kemaskiniDisabled"
-        :pertanyaanOnClick="pertanyaanOnClick" 
-        :kemaskiniOnClick="kemaskiniOnClick">
-      </AppActionTab>
-  </div>
+                <FormField type="text" 
+                  name="negeri" 
+                  label="Negeri" 
+                  placeholder="" 
+                  :value="formValue['negeri']"
+                  :disabled="formDisabled['negeri']"
+                  :required="formRequired['negeri']"
+                  @onChange="onChange"></FormField>
+              </div>
+
+            </div>
+
+        </GroupBox>
+
+      <!-- ################################################################### -->
+      <!--  EXAMPLESSS ####################################################### -->
+      <GroupBox title="Example" v-if="false">
+        <!-- Example for text -->
+        <FormField type="text" 
+            name="negeri" 
+            label="Negeri" 
+            placeholder="" 
+            :value="formValue['negeri']"
+            :disabled="formDisabled['negeri']"
+            :required="formRequired['negeri']"
+            @onChange="onChange"></FormField>
+
+        <!-- Example for number -->
+        <FormField type="number" 
+            name="negeri" 
+            label="Negeri"
+            placeholder="" 
+            :value="formValue['negeri']"
+            :disabled="formDisabled['negeri']"
+            :required="formRequired['negeri']"
+            @onChange="onChange"></FormField>
+
+        <!-- Example for select -->
+        <FormField type="select" 
+            name="jenis_dokumen" 
+            label="Jenis Dokumen" 
+            :dataset="transactionRefTable('Ref007DocumentType',{value:'R007DocTypeCd',label:'R007DocTypeDesc'})"
+            :value="formValue['jenis_dokumen']"
+            :disabled="formDisabled['jenis_dokumen']"
+            :required="formRequired['jenis_dokumen']"
+            @onChange="onChange"></FormField>
+
+        <!-- Example for radiobox -->
+        <FormField type="radiobox" 
+          name="jantina" 
+          label="Jantina" 
+          :value="formValue['jantina']" 
+          :dataset="transactionDataset['jantina']"
+          @onChange="onChange"></FormField>
+        
+        <!-- Example for checkbox -->
+        <FormField type="checkbox" 
+          name="dokumen" 
+          label="Dokumen" 
+          :valueArray="formValue['dokumen']"
+          :dataset="transactionDataset['branch']"
+          @onChange="onChange"></FormField>
+
+        <!-- Example for date -->
+        <FormField type="date" 
+          name="dateTest" 
+          label="Date Test" 
+          placeholder="" 
+          :value="formValue['dateTest']"
+          :disabled="formDisabled['dateTest']"
+          :required="formRequired['dateTest']"
+          @onChange="onChange"></FormField>
+          
+      </GroupBox>
+       
+    </div>
+
+
+    </div>
+    <!-- this is action of our tab pertanyaan, kemaskini, etc -->
+    <AppActionTab 
+      :pertanyaanDisabled="pertanyaanDisabled"
+      :kemaskiniDisabled="kemaskiniDisabled"
+      :pertanyaanOnClick="pertanyaanOnClick" 
+      :kemaskiniOnClick="kemaskiniOnClick">
+    </AppActionTab>
+
+
+    <div>
+        <br><br>
+        local formRef <br>
+        {{this.formRef}}
+        <br><br>
+
+        local formValue <br>
+        {{this.formValue}}
+        <br><br>     
+
+        local formDisabled <br>
+        {{this.formDisabled}}
+        <br><br>    
+
+        local formRequired <br>
+        {{this.formRequired}}
+        <br><br>
+
+        local formError <br>
+        {{this.formError}}
+        <br><br> 
+    </div>
+
+</div>
 </template>
 
 <script>
@@ -239,7 +289,7 @@ export default {
         this.setFormRequired("negeri", true);
       },
 
-      // Do Not Change This
+      // Do Not Remove This
       ...TabGeneralHelper.getExtraData(),
       pertanyaanDisabled: false,
       kemaskiniDisabled: false
@@ -250,8 +300,7 @@ export default {
   // DO NOT CHANGE ANYTHING BELOW THIS LINE -----------------------------------------------------------------------
 
   created() {
-    // Do Not Change This
-    this.startCreated();
+    this.startCreated(); // Do Not Remove This Line
 
     // TODO
     // set initial state of the input here
