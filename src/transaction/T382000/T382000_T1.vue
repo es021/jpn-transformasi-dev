@@ -46,6 +46,15 @@
               :required="formRequired['jenis_dokumen']"
             @onChange="onChange"></FormField>
 
+          <FormField type="select" 
+            name="negara_pengeluar" 
+            label="Negara Pengeluar" 
+            :dataset="transactionRefTable('Ref011Country',{value:'R011CtryCd',label:'R011CtryDesc'})"
+            :value="formValue['negara_pengeluar']"
+            :disabled="formDisabled['negara_pengeluar']"
+            :required="formRequired['negara_pengeluar']"
+            @onChange="onChange"></FormField>
+
             <FormField type="text" 
               name="nama_pemohon" 
               label="Nama Pemohon" 
@@ -315,7 +324,7 @@ export default {
 
     this.setFormDisabled("no_kpt", true);
     this.setFormDisabled("no_dokumen", true);
-    this.setFormDisabled("jenis_dokumen", true);
+    //this.setFormDisabled("jenis_dokumen", true);
     this.setFormDisabled("nama_pemohon", true);
     this.setFormDisabled("alamat_1", true);
     this.setFormDisabled("alamat_2", true);

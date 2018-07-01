@@ -2,7 +2,7 @@
 <template>
   <div class="form-field" :class="{error:hasError()}">
     <div class="ff-flex">
-      <div class="ff-label" :class="{empty:label==''}">{{label}}</div>
+      <div class="ff-label" :title="name" :class="{empty:label==''}">{{label}}</div>
       <div class="ff-item">
         
         <input  v-if="isInput()" :ref="name" @change="onChange" 
@@ -36,7 +36,7 @@
            </div>
         </span>
 
-        <div v-if="hasError()" class="ff-error">{{error}}</div>
+        <div  v-if="hasError()" class="ff-error">{{error}}</div>
       </div>
     </div>
   </div>
@@ -135,7 +135,7 @@ export default {
   },
   methods: {
     hasError() {
-      return this.error !== false;
+      return this.error !== false && this.error !== "" && this.error !== null && typeof this.error !== "undefined" ;
     },
     onPropValueChange(value, oldValue) {
       //console.log("propchange", value, oldValue);
@@ -159,7 +159,7 @@ export default {
 
     onChange() {
       var value = this.getRefValue();
-      console.log("onChange FormField", value);
+      //console.log("onChange FormField", value);
 
       this.currentValue = value;
       this.doValidation();
@@ -185,6 +185,7 @@ export default {
     },
     getRefValue() {
       var ref = this.$refs[this.name];
+      
       var val = null;
       if (this.isCheckbox()) {
         val = [];

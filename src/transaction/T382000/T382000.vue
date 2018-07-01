@@ -55,6 +55,18 @@ export default {
         {
           table: "Ref007DocumentType", // TODO- set table name here using this format, dont use REF_005_RACE
           field: ["R007DocTypeCd", "R007DocTypeDesc"] // TODO set field that we want, if we want all just set to empty array, => []
+        },
+        {
+          table: "Ref011Country", // TODO- set table name here using this format, dont use REF_005_RACE
+          field: [] // TODO set field that we want, if we want all just set to empty array, => []
+        },
+        {
+          table: "Ref008State", // TODO- set table name here using this format, dont use REF_005_RACE
+          field: [] // TODO set field that we want, if we want all just set to empty array, => []
+        },
+        {
+          table: "Ref009City", // TODO- set table name here using this format, dont use REF_005_RACE
+          field: [] // TODO set field that we want, if we want all just set to empty array, => []
         }
       ],
 
