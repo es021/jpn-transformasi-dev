@@ -40,6 +40,7 @@
         input:disabled, select:disabled{
             background: $COLOR-GRAY-LIGHT;
             border: 1px gray solid;
+            color: #3f3f3f;
         }
 
         input:focus, select:focus{
@@ -63,7 +64,7 @@
         }
 
         .ffDisabled{
-            color:grey;
+            color:#3f3f3f;
         }
     }
 

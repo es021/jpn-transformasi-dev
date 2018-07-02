@@ -49,17 +49,18 @@ export function getAllComputed() {
 
 export function getAllMethod() {
     return {
-        setThisData(key, name, value) {
-            var tab = this.tabId;
-
-            // first time not in store yet
-            if (this.transactionFormObjectByName(key, tab, name) == null) {
-                this.$set(this[key], name, value)
+        // #########################################################################
+        // Useful functions
+        // return first name which has no value
+        // return true if all has value
+        isAllRequiredHasValue(nameArr) {
+            for (var i in nameArr) {
+                var name = nameArr[i];
+                if (this.isFormValueEmpty(name)) {
+                    return name;
+                }
             }
-            // recreate from store
-            else {
-                this.transSetFormObjectByName({ key: key, tab: tab, name: name, data: value })
-            }
+            return true;
         },
         // #########################################################################
         // Functions For Transaction Tab
@@ -136,6 +137,18 @@ export function getAllMethod() {
 
         // #########################################################################
         // Other function
+        setThisData(key, name, value) {
+            var tab = this.tabId;
+
+            // first time not in store yet
+            if (this.transactionFormObjectByName(key, tab, name) == null) {
+                this.$set(this[key], name, value)
+            }
+            // recreate from store
+            else {
+                this.transSetFormObjectByName({ key: key, tab: tab, name: name, data: value })
+            }
+        },
         onChange(name, value, error, ref) {
             //console.log("onChange parent", name, value, error);
 

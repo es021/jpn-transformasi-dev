@@ -16,6 +16,8 @@ function isValidNumber(input) {
 }
 
 
+
+
 ValidateClass.prototype.noPermohonan = function (input) {
     if (!isValidNumber(input)) {
         return "No Permohonan must only contain numbers";

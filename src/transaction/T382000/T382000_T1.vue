@@ -234,8 +234,7 @@ import Vue from "vue";
 import * as ApiHelper from "../../helper/api-helper";
 import { SoapErr } from "../../helper/soap-helper";
 import * as TabGeneralHelper from "../../helper/tab-general-helper";
-
-const pertanyaanOnClick = () => {};
+const showLocalDebug = false;
 
 export default {
   name: "T382000_T1", // TODO - set name here same to this filename
@@ -370,7 +369,7 @@ export default {
       pertanyaanDisabled: false,
       kemaskiniLoading: false,
       kemaskiniDisabled: false,
-      showLocalDebug: true
+      showLocalDebug: showLocalDebug
     };
   },
 

@@ -25,6 +25,7 @@ import LayoutRow from '@/components/LayoutRow'
 import LayoutColLeft from '@/components/LayoutColLeft'
 import LayoutColRight from '@/components/LayoutColRight'
 import LayoutColFull from '@/components/LayoutColFull'
+import LayoutColCenter from '@/components/LayoutColCenter'
 
 import ListTable from '@/components/ListTable'
 
@@ -45,6 +46,7 @@ Vue.component('LayoutRow', LayoutRow);
 Vue.component('LayoutColLeft', LayoutColLeft);
 Vue.component('LayoutColRight', LayoutColRight);
 Vue.component('LayoutColFull', LayoutColFull);
+Vue.component('LayoutColCenter', LayoutColCenter);
 
 Vue.component('ListTable', ListTable);
 
