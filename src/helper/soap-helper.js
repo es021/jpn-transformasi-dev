@@ -31,6 +31,9 @@
 
 \*****************************************************************************/
 
+export const SoapErr = {
+    NOT_FOUND: "NOT_FOUND"
+};
 
 export function SOAPClientParameters(paramObj) {
 

@@ -62,6 +62,14 @@ export function getAllMethod() {
             }
         },
         // #########################################################################
+        // Functions For Transaction Tab
+        addEnabledTab(tabId) {
+            this.transAddEnabledTab(tabId);
+        },
+        removeEnabledTab(tabId) {
+            this.transRemoveEnabledTab(tabId);
+        },
+        // #########################################################################
         // Functions For Form Value
         setFormValue(name, value) {
             this.setThisData("formValue", name, value)

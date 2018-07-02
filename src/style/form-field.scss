@@ -6,22 +6,23 @@
     .ff-flex{
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      //justify-content: space-between;
     }
 
     .ff-label{
         flex-grow: 1;
         color:$COLOR-BLUE;
         margin-right: 10px;
-        max-width: 150px;
+        max-width: 125px;
+        text-align: right;
     }
 
-    .ff-label.empty{
-        margin-right: 35px;
-    }
+    // .ff-label.empty{
+    //     margin-right: 35px;
+    // }
 
     .ff-item{
-        flex-grow: 2;
+        flex-grow: 1;
         height: 25px;
         input,select{
             width: 100%;

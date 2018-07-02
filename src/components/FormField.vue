@@ -7,6 +7,7 @@
         
         <input  v-if="isInput()" :ref="name" @change="onChange" 
           :required="required" :disabled="disabled" :value="value" :type="type" :name="name" 
+          :step="step"
           :placeholder="placeholder"/>
 
         <!-- type we use input because we already use pickaday lib !-->
@@ -74,6 +75,10 @@ export default {
     name: {
       type: String
     },
+    step: {
+      type: String,
+      default: "any"
+    },
     label: {
       type: String,
       default: ""
@@ -135,7 +140,12 @@ export default {
   },
   methods: {
     hasError() {
-      return this.error !== false && this.error !== "" && this.error !== null && typeof this.error !== "undefined" ;
+      return (
+        this.error !== false &&
+        this.error !== "" &&
+        this.error !== null &&
+        typeof this.error !== "undefined"
+      );
     },
     onPropValueChange(value, oldValue) {
       //console.log("propchange", value, oldValue);
@@ -185,7 +195,7 @@ export default {
     },
     getRefValue() {
       var ref = this.$refs[this.name];
-      
+
       var val = null;
       if (this.isCheckbox()) {
         val = [];

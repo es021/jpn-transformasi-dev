@@ -27,14 +27,18 @@ var tabData = [];
 // intialize tab component
 // TODO - Please add as much tab as needed here
 // Tab 1
-import T382000_T1 from "./T382000_T1";
-Vue.component("T382000_T1", T382000_T1);
-tabData.push({ id: "T382000_T1", label: "Permohonan" });
+// import T382000_T1 from "./T382000_T1";
+// Vue.component("T382000_T1", T382000_T1);
+// tabData.push({ id: "T382000_T1", label: "Permohonan" });
 
 // Tab 2
 import T382000_T2 from "./T382000_T2";
 Vue.component("T382000_T2", T382000_T2);
 tabData.push({ id: "T382000_T2", label: "Bayaran" });
+
+// set which tab will be enabled initially
+//const initialTabEnabled = ["T382000_T1"];
+const initialTabEnabled = ["T382000_T2"];
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // main component for this transaction
@@ -107,8 +111,8 @@ export default {
     },
     initTabEnabled() {
       // TODO - set which tabs are enabled on first load
-      var tabEnabled = ["T382000_T1"];
-      this.transSetEnabledTab(tabEnabled);
+
+      this.transSetEnabledTab(initialTabEnabled);
     },
     ////////////////////////////////////////////////////////////////////////////
     // Do Not Change This

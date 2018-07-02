@@ -5,8 +5,14 @@
       <button @click="menuUtamaOnClick" class="btn btn-blue">Menu Utama</button>
     </div>
     <div>
-      <button @click="pertanyaanOnClick" :disabled="pertanyaanDisabled" class="btn btn-blue">Pertanyaan</button>
-      <button @click="kemaskiniOnClick" :disabled="kemaskiniDisabled" class="btn btn-blue">Kemaskini</button>
+      <button @click="pertanyaanOnClick" :disabled="pertanyaanDisabled || pertanyaanLoading" class="btn btn-blue">
+        Pertanyaan
+        <span v-if="pertanyaanLoading"><i class="fa fa-spinner fa-pulse"></i></span>
+      </button>
+      <button @click="kemaskiniOnClick" :disabled="kemaskiniDisabled || kemaskiniLoading" class="btn btn-blue">
+        Kemaskini
+        <span v-if="kemaskiniLoading"><i class="fa fa-spinner fa-pulse"></i></span>
+      </button>
     </div>
   </div>
 </template>
@@ -22,6 +28,14 @@ export default {
       default: false
     },
     kemaskiniDisabled: {
+      type: Boolean,
+      default: false
+    },
+    pertanyaanLoading: {
+      type: Boolean,
+      default: false
+    },
+    kemaskiniLoading: {
       type: Boolean,
       default: false
     },

@@ -21,6 +21,13 @@ import AppActionTab from '@/components/AppActionTab'
 import FormField from '@/components/FormField'
 import GroupBox from '@/components/GroupBox'
 
+import LayoutRow from '@/components/LayoutRow'
+import LayoutColLeft from '@/components/LayoutColLeft'
+import LayoutColRight from '@/components/LayoutColRight'
+import LayoutColFull from '@/components/LayoutColFull'
+
+import ListTable from '@/components/ListTable'
+
 import Form from '@/components/Form'
 import ManageNavi from '@/components/ManageNavi'
 import TableData from '@/components/TableData'
@@ -34,20 +41,30 @@ Vue.component('AppNavBar', AppNavBar);
 Vue.component('AppActionTab', AppActionTab);
 Vue.component('FormField', FormField);
 Vue.component('GroupBox', GroupBox);
+Vue.component('LayoutRow', LayoutRow);
+Vue.component('LayoutColLeft', LayoutColLeft);
+Vue.component('LayoutColRight', LayoutColRight);
+Vue.component('LayoutColFull', LayoutColFull);
+
+Vue.component('ListTable', ListTable);
 
 Vue.component('Form', Form);
 Vue.component('ManageNavi', ManageNavi);
 Vue.component('TableData', TableData);
 
 //import all style
-const scss = ["app", "form", "button", "content"
+const scss = [
+  "app", "form"
+  , "button", "content"
   , "general", "header"
-  , "table", "popup", "form-field", "group-box","pikaday"];
+  , "popup", "form-field"
+  , "group-box", "pikaday"
+  , "layout", "list-table"
+];
 
 scss.map((d, i) => {
   require(`./style/${d}.scss`);
 })
-
 
 const css = ["fontawesome-all.min"];
 css.map((d, i) => {

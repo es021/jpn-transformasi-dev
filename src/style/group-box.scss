@@ -1,25 +1,6 @@
 @import './define/_constant.scss';
 
 $BORDER-RADIUS : 15px;
-.app-row{ 
-    display: flex;
-    align-items: flex-start;
-}
-.app-col-left{
-    margin-right: 7px;
-    width: 100%;
-}
-
-.app-col-right{
-    margin-left: 7px;
-    width: 100%;
-}
-
-.app-col-full{
-    width: 100%;
-}
-
-
 .group-box{
     overflow: hidden;
     width: 100%;

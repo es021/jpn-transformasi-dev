@@ -70,10 +70,10 @@ export function soapRequest({ method, param, responseEntity, responseField, succ
     var soapParam = new SOAPClientParameters(param);
     SOAPClient.doSoap(SoapUrl, method, soapParam, responseEntity, responseField
         , function (data) {
-            console.log(data);
+            //console.log(data);
             success(data);
         }, function (err) {
-            console.log("err", err);
+            //console.log("err", err);
             error(err);
         }
     );
