@@ -13,6 +13,7 @@
     </div>
     <span v-else>
       <AppPopup></AppPopup>
+      <AppAlert></AppAlert>
       <JpnHeader></JpnHeader>
       <div class="jpn-bar-content">
         <JpnContent></JpnContent>

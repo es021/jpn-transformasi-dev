@@ -44,4 +44,19 @@
         line-height: 15px;
         margin-right: 10px;
     }
+
+    .user-info{
+        div{
+            display: flex;
+            justify-content: space-between;
+            border-bottom: gray solid 1px;
+            margin-bottom: 3px;
+            small{
+                margin-right: 10px;
+            }
+            b{
+                //background: blue;
+            }
+        }
+    }
 }

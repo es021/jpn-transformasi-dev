@@ -6,11 +6,11 @@
     </div>
     <div>
       <button @click="pertanyaanOnClick" :disabled="pertanyaanDisabled || pertanyaanLoading" class="btn btn-blue">
-        Pertanyaan
+        {{pertanyaanText}}
         <span v-if="pertanyaanLoading"><i class="fa fa-spinner fa-pulse"></i></span>
       </button>
       <button @click="kemaskiniOnClick" :disabled="kemaskiniDisabled || kemaskiniLoading" class="btn btn-blue">
-        Kemaskini
+        {{kemaskiniText}}
         <span v-if="kemaskiniLoading"><i class="fa fa-spinner fa-pulse"></i></span>
       </button>
     </div>
@@ -23,6 +23,14 @@ import { mapGetters, mapMutations } from "vuex";
 export default {
   name: "AppActionTab",
   props: {
+    pertanyaanText: {
+      type: String,
+      default: "Pertanyaan"
+    },
+    kemaskiniText: {
+      type: String,
+      default: "Kemaskini"
+    },
     pertanyaanDisabled: {
       type: Boolean,
       default: false

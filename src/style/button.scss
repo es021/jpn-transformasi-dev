@@ -21,7 +21,7 @@
 }
 
 .btn:disabled {
-    opacity: 0.7 !important;
+    opacity: 0.5 !important;
 }
 
 .btn.btn-lg {
@@ -50,3 +50,10 @@
 .btn.btn-red {
     background-color: $COLOR-RED;
 }
+
+.btn-group-vertical {
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+    margin: auto;
+  }

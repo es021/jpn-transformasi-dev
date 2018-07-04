@@ -52,7 +52,7 @@ export default {
   name: "FormField",
   props: {
     value: {
-      type: String, // {value:""}
+      type: [String, Number], // {value:""}
       default: null
     },
     disabled: {

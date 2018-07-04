@@ -84,7 +84,9 @@ export default {
 <style lang="scss">
 .jpn-nav-bar {
   display: flex;
+  margin-bottom: 10px;
   justify-content: space-between;
+
   .jnv-item {
     // general
     padding: 10px;

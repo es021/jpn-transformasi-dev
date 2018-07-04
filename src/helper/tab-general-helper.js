@@ -1,9 +1,13 @@
-import Vue from "vue";
+//import Vue from "vue";
 import { mapGetters, mapMutations } from "vuex";
 import Validate from "../helper/validate-helper";
+import { AlertConst } from "../store/modules/alert";
+import { TransMeta } from "../store/modules/transaction";
+import FingerprintPopup from "@/components/FingerprintPopup";
 
-export function getGetters(unix) {
+export function getGetters() {
     return [
+        "authUser",
         "transactionState",
         "transactionCurrentTabId",
         "transactionFormObjectByName", // key, tab, name
@@ -11,14 +15,15 @@ export function getGetters(unix) {
         "transactionFormObject", // key, tab
         "transactionDataset",
         "transactionRefTable",
-        "transactionCurrentTabId"
+        "transactionCurrentTabId",
+        "transactionMetaData"
     ];
 }
 
-
-
 export function getMutations() {
     return [
+        "popupOpen",
+        "alertOpen",
         "transChangeTab",
         "transSetEnabledTab",
         "transAddEnabledTab",
@@ -26,7 +31,8 @@ export function getMutations() {
         "transSetTabData", // tabData
         "transSetRefTable", // { key, data }
         "transSetFormObject", // { key, tab, data }
-        "transSetFormObjectByName" // { key, tab, name, data }
+        "transSetFormObjectByName", // { key, tab, name, data }
+        "transSetMetaData",// { key, value }
     ];
 }
 
@@ -50,17 +56,52 @@ export function getAllComputed() {
 export function getAllMethod() {
     return {
         // #########################################################################
+        // Fingerprint function 
+        startFingerprint(successHandler) {
+            this.openPopup("Semakan Kelulusan", FingerprintPopup, {
+                succes: successHandler,
+                error: (err) => {
+                    console.log("getAllMethod", err);
+                }
+            });
+
+        },
+        // #########################################################################
+        // Functions For Transaction MetaData
+        getStartTime() {
+            // YYYY-MM-DD-HH.MM.SS.XXXXXX
+            return this.transactionMetaData[TransMeta.TIME_START];
+        },
+        getEndTime() {
+            return this.transactionMetaData[TransMeta.TIME_END];
+        },
+        // #########################################################################
         // Useful functions
-        // return first name which has no value
+        // focus to the field that has no value and return false
         // return true if all has value
         isAllRequiredHasValue(nameArr) {
             for (var i in nameArr) {
                 var name = nameArr[i];
                 if (this.isFormValueEmpty(name)) {
-                    return name;
+                    this.alertError("Sila isi semua ruang yang diperlukan", () => {
+                        this.focusToFormField(name);
+                    });
+                    return false;
                 }
             }
             return true;
+        },
+        alertError(content, closeHandler) {
+            this.alertOpen({ type: AlertConst.ERROR, content: content, closeHandler: closeHandler });
+        },
+        alertSuccess(content, closeHandler) {
+            this.alertOpen({ type: AlertConst.SUCCESS, content: content, closeHandler: closeHandler });
+        },
+        alertInfo(content, closeHandler) {
+            this.alertOpen({ type: AlertConst.INFO, content: content, closeHandler: closeHandler });
+        },
+        openPopup(title, content, prop) {
+            this.popupOpen({ title: title, content: content, prop: prop });
         },
         // #########################################################################
         // Functions For Transaction Tab

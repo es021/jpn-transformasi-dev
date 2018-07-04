@@ -90,13 +90,13 @@ const mutations = {
     // setCheckoutStatus(state, status) {
     //     state.checkoutStatus = status
     // },
-    openPopup(state, { title, content, prop }) {
+    popupOpen(state, { title, content, prop }) {
         state.title = title;
         state.content = content;
         state.prop = prop;
         state.isOpen = true;
     },
-    closePopup(state) {
+    popupClose(state) {
         state.isOpen = false;
     }
 }

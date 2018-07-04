@@ -9,7 +9,7 @@
             </tr>
           </thead>
           <tbody>
-              <tr v-for="d in data" v-bind:key="d[dataKey]">
+              <tr :class="{clickable: onRowClick !== null}" @click="onRowClick(d)" v-for="d in data" v-bind:key="d[dataKey]">
                 <!-- <td><a class="btn btn-link" @click="editRow(d)"><i class="fa fa-edit"></i></a></td>
                 <td><a class="btn btn-link" @click="deleteRow(d)"><i class="fa fa-trash"></i></a></td> -->
                 <td v-for="(col,key) in arrangeData(d)">{{col}}</td>
@@ -39,6 +39,10 @@ export default {
         console.log(d);
         return d;
       }
+    },
+    onRowClick: {
+      type: Function,
+      default: null
     },
     renderColumn: {
       type: Function,

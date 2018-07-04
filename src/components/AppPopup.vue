@@ -1,6 +1,6 @@
 <template>
  <div v-if="state.isOpen" class="app-popup">
-    <div class="ap-bg" @click="close"></div> 
+    <div class="ap-bg" ></div> 
     <div class="ap-body">
       <div class="ap-header">
         {{state.title}}
@@ -23,7 +23,7 @@ export default {
     })
   },
   methods: {
-    ...mapMutations({ close: "closePopup" })
+    ...mapMutations({ close: "popupClose" })
   }
 };
 </script>

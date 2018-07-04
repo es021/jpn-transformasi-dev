@@ -15,10 +15,19 @@
             </div>
         </div>
     </div>
+    <div class="h-left">
+      <div class="user-info">
+        <div><small>OPER ID</small> <b>{{authUser["OPER_ID"]}}</b></div>
+        <div><small>BRANCH CODE</small> <b>{{authUser["BRANCH_CODE"]}}</b></div>
+        <div><small>PC ID</small> <b>{{authUser["PC_ID"]}}</b></div>
+      </div>
+    </div>
 </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "JpnHeader",
   props: {
@@ -29,6 +38,9 @@ export default {
   },
   data() {
     return {};
+  },
+  computed: {
+    ...mapGetters(["authUser"])
   },
   mounted() {},
   methods: {}

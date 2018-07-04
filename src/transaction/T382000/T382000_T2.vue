@@ -359,7 +359,7 @@
        
     </LayoutColFull>
 </LayoutRow>
-
+<button @click="getStartTime">getStartTime</button>
 <!-- this is action of our tab pertanyaan, kemaskini, etc -->
 <AppActionTab 
 :pertanyaanDisabled="pertanyaanDisabled"
@@ -401,6 +401,7 @@ import Vue from "vue";
 import * as ApiHelper from "../../helper/api-helper";
 import { SoapErr } from "../../helper/soap-helper";
 import * as TabGeneralHelper from "../../helper/tab-general-helper";
+import * as PaymentHelper from "../../helper/payment-helper";
 
 const showLocalDebug = false;
 
@@ -446,50 +447,42 @@ export default {
       // ######################################################################
       // PERTANYAAN -----------------------------------------------------------
       //TODO - set pertanyaan on click event here
-      pertanyaanOnClick: () => {
-        // Define variable and function in process pertanyaan
-        var noPermohonan = this.getFormValue("no_permohonan");
-
-        const startProcessPertanyaan = () => {
-          // Do Front End Validation first
-          // check if no permohonan is sudah diisi
-          if (this.isFormValueEmpty("no_permohonan")) {
-            alert("No Permohonan diperlukan untuk membuat pertanyaan");
-            this.focusToFormField("no_permohonan");
-            return;
-          }
-
-          // check if no permohonan ad error
-          if (this.isFormHasError("no_permohonan") && false) {
-            alert("No Permohonan tidak valid");
-            this.focusToFormField("no_permohonan");
-            return;
-          }
-
-          // if all font end validation passes,
-          // set pertanyaan loading to true,
-          this.pertanyaanLoading = true;
-          // start with whatever need to be done from specs
-          checkInTgpdPymtDetail();
-        };
-
-        const endProcessPertanyaan = sucessHandler => {
-          this.pertanyaanLoading = false;
-
-          if (sucessHandler) {
-            sucessHandler();
-          }
-        };
-
-        //Start process pertanyaan
-        startProcessPertanyaan();
-      },
+      pertanyaanOnClick: () => {},
       // ################################################################################
       // KEMASKINI -----------------------------------------------------------
       //TODO - set kemaskini on click event here
       kemaskiniOnClick: () => {
-        this.setFormRequired("sebab_pengecualian", true);
-        this.setFormRequired("negeri", true);
+        var requiredField = ["kod_kecualian"];
+        if (!this.isAllRequiredHasValue(requiredField)) {
+          return;
+        }
+
+        //1.1.1.	Kemaskini maklumat bayaran ke table TGPD_PAYMENT_DETAIL dan PCS_DETAILS, APPLICANT_INFO
+        var kodKecualian = this.getFormValue("kod_kecualian");
+        switch (kodKecualian) {
+          case "Perlu Bayaran":
+            var jumlahBayaran = this.getFormValue("jumlah_bayaran");
+            var jumlahPerlu = this.getFormValue("jumlah_perlu_dibayar");
+            if (jumlahPerlu != jumlahBayaran) {
+              this.alertError(
+                "Jumlah Bayaran tidak sama dengan Jumlah Perlu Dibayar. Sila Tambah Bayaran Baru",
+                () => {
+                  this.focusToFormField("cara_bayaran");
+                }
+              );
+            }
+
+            // do bayaran here
+            this.kemaskiniLoading = true;
+            break;
+
+          case "Pengecualian Bayaran":
+            // open fingerprint verification steps
+            this.startFingerprint(res => {
+              console.log("Do Whatever You Want With The Response Here", res);
+            });
+            break;
+        }
       },
       // ################################################################################
       // OTHER STUFF -----------------------------------------------------------
@@ -505,6 +498,8 @@ export default {
 
   created() {
     this.startCreated(); // Do Not Remove This Line
+
+    this.pertanyaanDisabled = true;
 
     this.setFormValue("kd_jenis_kad", "MyDebit");
     this.setFormValue("jumlah_bayaran", 0);
@@ -549,8 +544,10 @@ export default {
       // untuk cek, wang pos and wang kiriman
       const validasiJenis1 = (no, tarikh, amaun) => {
         if (this.isFormHasError(tarikh)) {
-          this.focusToFormField(tarikh);
-          alert("Tarikh tidak valid");
+          this.alertError("Tarikh tidak valid", () => {
+            this.focusToFormField(tarikh);
+          });
+
           return false;
         }
 
@@ -576,13 +573,14 @@ export default {
       ) => {
         // check 4 digit no kad
         var noKad = this.getFormValue(no_kad);
-        if (
-          typeof noKad !== "undefined" &&
-          noKad !== null &&
-          noKad.length !== 4
-        ) {
-          this.focusToFormField(no_kad);
-          alert("Sila masukkan hanya 4 digit terakhir No Kad");
+
+        var errorNoKad =
+          typeof noKad !== "undefined" && noKad !== null && noKad.length !== 4;
+
+        if (errorNoKad) {
+          this.alertError("Sila masukkan hanya 4 digit terakhir No Kad", () => {
+            this.focusToFormField(no_kad);
+          });
           return false;
         }
 
@@ -597,7 +595,7 @@ export default {
         requiredField.push(kod_sah);
         requiredField.push(amaun);
 
-        alert("Sila Selesaikan Bayaran Di Terminal");
+        this.alertInfo("Sila Selesaikan Bayaran Di Terminal");
 
         return true;
       };
@@ -657,11 +655,7 @@ export default {
           break;
       }
 
-      // check all required field is filled
-      var nameWithNoValue = this.isAllRequiredHasValue(requiredField);
-      if (nameWithNoValue !== true) {
-        this.focusToFormField(nameWithNoValue);
-        alert("Sila isi semua ruang yang diperlukan");
+      if (!this.isAllRequiredHasValue(requiredField)) {
         return;
       }
 
@@ -686,6 +680,19 @@ export default {
     },
     resetCaraBayaran() {
       this.setFormValue("cara_bayaran", "");
+    },
+    getDataForKemaskini() {
+      var data = {
+        InTgpdPymtDetail: {
+          GpdApplid: this.getFormValue("no_permohonan"),
+          GpdBrchCdJpn: this.authUser()["BRANCH_CODE"],
+          GpdTxnCode: "382000",
+          GpdTxnDesc: "",
+          GpdTxnDt: this.getStartTime(),
+          // TODO
+          GpdTxnMode: PaymentHelper.getTransMode()
+        }
+      };
     },
     ...TabGeneralHelper.getAllMethod()
   },

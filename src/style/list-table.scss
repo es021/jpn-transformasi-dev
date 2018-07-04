@@ -24,4 +24,10 @@
     tr:nth-child(even) {
         background-color: #dce5e8;
     }
+
+    tbody tr.clickable:hover{
+        cursor: pointer;
+        background: $COLOR-BLUE-DARK;
+        color: white;
+    }
 }

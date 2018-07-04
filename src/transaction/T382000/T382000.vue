@@ -5,13 +5,11 @@
       <br>{{refTableCompleted / refTable.length * 100}} %<br><br>
     </div>
     <div v-else>
-      <AppNavBar :data="tabData"></AppNavBar>
       <AppBreadcrumbs :text="breadcrumbsText"></AppBreadcrumbs>
+      <AppNavBar :data="tabData"></AppNavBar>
       <component :is="transactionCurrentTabId"></component>
     </div>
-
-    <AppDebug></AppDebug>
-
+    <!-- <AppDebug></AppDebug> -->
   </div>
 </template>
 
@@ -19,9 +17,7 @@
 // initialize common functions and component
 // Dont Change this
 import Vue from "vue";
-import * as ApiHelper from "../../helper/api-helper";
-import * as TabGeneralHelper from "../../helper/tab-general-helper";
-import { mapGetters, mapMutations } from "vuex";
+import * as TabParentGeneralHelper from "../../helper/tab-parent-general-helper";
 var tabData = [];
 
 // intialize tab component
@@ -73,96 +69,21 @@ export default {
           field: [] // TODO set field that we want, if we want all just set to empty array, => []
         }
       ],
-
       // Do Not Change This
       refTableCompleted: 0,
       tabData: tabData,
-      loading: false
+      loading: false,
+      initialTabEnabled: initialTabEnabled
     };
   },
-
-  mounted() {
-    this.init();
+  created() {
+    this.startCreated();
   },
   methods: {
-    init() {
-      // Do Not Change This
-      this.loading = true;
-      this.loadAllRefTable();
-      this.transSetTabData(tabData); // Set Nav Bar Data
-      this.initTabEnabled();
-    },
-    loadAllRefTable() {
-      ApiHelper.loadRefTable(
-        this.refTable,
-        (key, data) => {
-          //progress Handler
-          this.transSetRefTable({ key: key, data: data });
-          this.refTableCompleted++;
-          console.log(key, data);
-          if (this.refTable.length == this.refTableCompleted) {
-            this.loading = false;
-          }
-        },
-        err => {
-          // error Handler
-        }
-      );
-    },
-    initTabEnabled() {
-      // TODO - set which tabs are enabled on first load
-
-      this.transSetEnabledTab(initialTabEnabled);
-    },
-    ////////////////////////////////////////////////////////////////////////////
-    // Do Not Change This
-    ...mapMutations(TabGeneralHelper.getMutations())
+    ...TabParentGeneralHelper.getAllMethod()
   },
   computed: {
-    ...mapGetters(TabGeneralHelper.getGetters())
+    ...TabParentGeneralHelper.getAllComputed()
   }
 };
-
-/*
-
-
-  
-      ApiHelper.soapRequest({
-        // TODO -- (SERVER) this is the name of the server procedure
-        method: "SsoapTbprParent",
-        // TODO - (IMPORT) this is parameter structure set in soap service
-        param: {
-          InTbprParent: {
-            BprHscNo: "000314011256"
-          }
-        },
-        // TODO - (EXPORT) this is response entity that we are expecting from soap service
-        responseEntity: "OutTbprParent",
-        success: data => {
-          // TODO - set the key of this data so that we can access it later
-          var dataKey = "tbpr_parent";
-          this.loadSuccess(dataKey, data);
-        },
-        error: err => {
-          loadError(err);
-        }
-      });
-  
-
-*/
-/*
-   soapRequest({
-        method: "SsoapTbprParent",
-        param: {
-          InTbprParent: {
-            BprHscNo: "000314011256"
-          }
-        },
-        responseEntity: "OutTbprParent",
-        success: data => {
-          this.loading = false;
-        },
-        error: err => {}
-      });
-*/
 </script>

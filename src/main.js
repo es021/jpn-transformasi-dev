@@ -14,6 +14,7 @@ registerTransaction(Vue);
 import JpnHeader from '@/components/JpnHeader'
 import JpnContent from '@/components/JpnContent'
 import AppPopup from '@/components/AppPopup'
+import AppAlert from '@/components/AppAlert'
 import AppDebug from '@/components/AppDebug'
 import AppBreadcrumbs from '@/components/AppBreadcrumbs'
 import AppNavBar from '@/components/AppNavBar'
@@ -36,6 +37,7 @@ import TableData from '@/components/TableData'
 Vue.component('JpnHeader', JpnHeader);
 Vue.component('JpnContent', JpnContent);
 Vue.component('AppPopup', AppPopup);
+Vue.component('AppAlert', AppAlert);
 Vue.component('AppDebug', AppDebug);
 Vue.component('AppBreadcrumbs', AppBreadcrumbs);
 Vue.component('AppNavBar', AppNavBar);
@@ -62,6 +64,7 @@ const scss = [
   , "popup", "form-field"
   , "group-box", "pikaday"
   , "layout", "list-table"
+  , "alert"
 ];
 
 scss.map((d, i) => {

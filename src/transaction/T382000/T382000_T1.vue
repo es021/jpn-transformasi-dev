@@ -196,9 +196,10 @@
 <AppActionTab 
 :pertanyaanDisabled="pertanyaanDisabled"
 :pertanyaanLoading="pertanyaanLoading"
+:pertanyaanOnClick="pertanyaanOnClick" 
+
 :kemaskiniDisabled="kemaskiniDisabled"
 :kemaskiniLoading="kemaskiniLoading"
-:pertanyaanOnClick="pertanyaanOnClick" 
 :kemaskiniOnClick="kemaskiniOnClick">
 </AppActionTab>
 
@@ -255,15 +256,20 @@ export default {
           // Do Front End Validation first
           // check if no permohonan is sudah diisi
           if (this.isFormValueEmpty("no_permohonan")) {
-            alert("No Permohonan diperlukan untuk membuat pertanyaan");
-            this.focusToFormField("no_permohonan");
+            this.alertError(
+              "No Permohonan diperlukan untuk membuat pertanyaan",
+              () => {
+                this.focusToFormField("no_permohonan");
+              }
+            );
             return;
           }
 
           // check if no permohonan ad error
           if (this.isFormHasError("no_permohonan")) {
-            alert("No Permohonan tidak valid");
-            this.focusToFormField("no_permohonan");
+            this.alertError("No Permohonan tidak valid", () => {
+              this.focusToFormField("no_permohonan");
+            });
             return;
           }
 
@@ -274,12 +280,8 @@ export default {
           checkInTgpdPymtDetail();
         };
 
-        const endProcessPertanyaan = sucessHandler => {
+        const endProcessPertanyaan = () => {
           this.pertanyaanLoading = false;
-
-          if (sucessHandler) {
-            sucessHandler();
-          }
         };
 
         const checkInTbaeAdoptExt = () => {
@@ -310,15 +312,16 @@ export default {
               this.setFormValue("negeri", "01");
 
               // end process pertanyaan,
-              endProcessPertanyaan(() => {
-                this.addEnabledTab("T382000_T2");
-              });
+              endProcessPertanyaan();
+              this.addEnabledTab("T382000_T2");
             },
             error: err => {
               if (err === SoapErr.NOT_FOUND) {
-                alert("No Permohonan tidak wujud / tidak sah.");
+                this.alertInfo("No Permohonan tidak wujud / tidak sah.", () => {
+                  this.focusToFormField("no_permohonan");
+                });
               } else {
-                alert(err);
+                this.alertError(err);
               }
               endProcessPertanyaan();
             }
@@ -357,10 +360,7 @@ export default {
       // ################################################################################
       // KEMASKINI -----------------------------------------------------------
       //TODO - set kemaskini on click event here
-      kemaskiniOnClick: () => {
-        this.setFormRequired("no_kpt", true);
-        this.setFormRequired("negeri", true);
-      },
+      kemaskiniOnClick: () => {},
       // ################################################################################
       // OTHER STUFF -----------------------------------------------------------
       // Do Not Remove This
@@ -375,6 +375,7 @@ export default {
 
   created() {
     this.startCreated(); // Do Not Remove This Line
+    this.kemaskiniDisabled = true;
 
     // TODO
     // set initial state of the input here
@@ -386,7 +387,6 @@ export default {
     // this.setFormRequired("name_of_the_input", true);
 
     this.setFormRequired("no_permohonan", true);
-
     this.setFormDisabled("no_kpt", true);
     //this.setFormDisabled("no_dokumen", true);
     //this.setFormDisabled("jenis_dokumen", true);

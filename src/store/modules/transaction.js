@@ -1,6 +1,13 @@
+
+export const TransMeta = {
+    TIME_START: "time_start",
+    TIME_END: "time_end"
+}
+
 const state = {
     tabEnabled: [], // store id of all tab that is enabled now
     tabData: [], // store all tab in this transaction
+    metaData: {},
     currentTabIndex: 0,
     formValue: {},
     formDisabled: {},
@@ -18,6 +25,7 @@ const state = {
     },
     refTable: {}
 }
+
 
 /// ########################################################
 /// HELPER FUNCTION 
@@ -68,6 +76,7 @@ function getFormObjectByName(state, key, tab, name) {
 
 const getters = {
     transactionState: state => state,
+    transactionMetaData: state => state.metaData,
     transactionDataset: state => state.dataset,
     transactionCurrentTabId: (state) => {
         try {
@@ -115,6 +124,7 @@ const mutations = {
         state.tabEnabled = tabEnabled;
     },
     transAddEnabledTab(state, id) {
+        console.log("transAddEnabledTab")
         if (state.tabEnabled.indexOf(id) <= -1) {
             state.tabEnabled.push(id);
         }
@@ -138,7 +148,12 @@ const mutations = {
     transSetFormObjectByName(state, { key, tab, name, data }) {
         //console.log("transSetFormValue", key, tab, data);
         state[key][tab][name] = data;
-    }
+    },
+    transSetMetaData(state, { key, value }) {
+        if (typeof state.metaData[key] == "undefined") {
+            state.metaData[key] = value;
+        }
+    },
 }
 
 /// ########################################################

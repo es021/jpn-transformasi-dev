@@ -1,30 +1,26 @@
 
-import { NAVI_ROOT } from './navi-helper';
+export function _GET(sParam) {
+    try {
+        var sPageURL = decodeURIComponent(window.location.href);
+        var getParam = sPageURL.split("?")[1];
+        var sURLVariables = getParam.split('&');
+        var sParameterName;
+        var i;
+        var toRet = null;
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+            if (sParameterName[0] === sParam) {
+                toRet = sParameterName[1] === undefined ? true : sParameterName[1];
+                break;
+            }
+        }
+        return toRet;
+    } catch (err) {
+        console.log("GET err", err);
+        return null;
+    }
 
-// export function _GET(sParam) {
-//     var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-//         sURLVariables = sPageURL.split('&'),
-//         sParameterName,
-//         i;
-
-//     var toRet = null;
-
-
-//     for (i = 0; i < sURLVariables.length; i++) {
-//         sParameterName = sURLVariables[i].split('=');
-
-//         if (sParameterName[0] === sParam) {
-//             toRet = sParameterName[1] === undefined ? true : sParameterName[1];
-//             break;
-//         }
-//     }
-
-//     if (sParam == "page" && toRet == null) {
-//         toRet = NAVI_ROOT;
-//     }
-
-//     return toRet;
-// }
+}
 
 String.prototype.replaceAll = function (search, replace) {
     return this.replace(new RegExp(search, 'g'), replace);
@@ -45,7 +41,7 @@ const WINDOW_ID = "JPN_WINDOW";
 //   }
 
 
-export function openWindowPopup(url, id) {
+export function openWindowPopup(url, id, width, height, top, left) {
 
     closeWindowPopup(id);
 
@@ -55,10 +51,10 @@ export function openWindowPopup(url, id) {
     // var height = screen.height - 200;
 
     // fullscreen
-    var width = screen.width;
-    var height = screen.height;
-    var top = 0;
-    var left = 0;
+    width = (!width) ? screen.width : width;
+    height = (!height) ? screen.height : height;
+    top = (!top) ? 0 : top;
+    left = (!left) ? 0 : left;
 
     id = (typeof id === "undefined") ? WINDOW_ID : id;
 

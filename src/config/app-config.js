@@ -15,5 +15,6 @@ export const AppPath = {
 };
 
 export const STORE_AUTH = "JPN-LOCAL-STORAGE-AUTH";
+export const STORE_FINGERPRINT = "JPN-LOCAL-STORAGE-FINGERPRINT";
 export const STORE_NAVI = "JPN-LOCAL-STORAGE-NAVI";
 export const STORE_ADMIN = "JPN-LOCAL-STORAGE-ADMIN";
