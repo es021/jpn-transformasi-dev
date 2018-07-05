@@ -3,7 +3,7 @@
   <div class="form-field" :class="{error:hasError()}">
     <div class="ff-flex">
       <div class="ff-label" :title="name" :class="{empty:label==''}">{{label}}</div>
-      <div class="ff-item">
+      <div class="ff-item" :class="{'auto-height':isCheckbox()|| isRadiobox()}">
         
         <input  v-if="isInput()" :ref="name" @change="onChange" 
           :required="required" :disabled="disabled" :value="value" :type="type" :name="name" 

@@ -1,12 +1,16 @@
 
 <template>
   <div>
-    <h2>Test Page</h2>
-
+    {{movie}}
+    <h2>Zul's Test Page</h2>
     <h4>To Camel Case</h4>
     <input type="text" v-model="toCamelCase" @change="toCamelCaseChange"/>
     <br>
+    
+    <button @click="onClickTest">Click Di Sini</button>
+
     {{camelCased}}
+
   </div>
 </template>
 
@@ -16,12 +20,18 @@ export default {
   data() {
     return {
       toCamelCase: "",
-      camelCased: ""
+      camelCased: "",
+      movie: "Ant Man 2"
     };
   },
+  
   methods: {
+    onClickTest() {
+      this.movie = "lalala";
+    },
     toCamelCaseChange() {
       var input = this.toCamelCase;
+      console.log(this.toCamelCase);
 
       var arr = input.split("_");
       var res = "";
