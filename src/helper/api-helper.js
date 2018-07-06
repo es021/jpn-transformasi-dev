@@ -1,6 +1,6 @@
 //TODO soap request here
 import { SOAPClient, SOAPClientParameters } from './soap-helper';
-import { SoapUrl } from '../config/app-config';
+import { SoapUrlRoot, SoapRefWebService } from '../config/app-config';
 
 export function loadRefTable(tables, progressHandler, errorHandler) {
     if (typeof tables == "string") {
@@ -34,6 +34,7 @@ export function loadRefTable(tables, progressHandler, errorHandler) {
         let responseEntity = getResponseEntity(tableName);
 
         soapRequest({
+            webService: SoapRefWebService,
             // TODO -- (SERVER) this is the name of the server procedure
             method: method,
             // TODO - (IMPORT) this is parameter structure set in soap service
@@ -54,7 +55,7 @@ export function loadRefTable(tables, progressHandler, errorHandler) {
 
 }
 
-export function soapRequest({ method, param, responseEntity, responseField, success, error }) {
+export function soapRequest({ webService, method, param, responseEntity, responseField, success, error }) {
     /*    
     method : "SsoapTbprParent";
     param : {
@@ -66,9 +67,11 @@ export function soapRequest({ method, param, responseEntity, responseField, succ
     success : function(data){}
     error : function(err){}
     */
-
+    var url = SoapUrlRoot + webService;
+    console.log(url)
+    console.log(webService)
     var soapParam = new SOAPClientParameters(param);
-    SOAPClient.doSoap(SoapUrl, method, soapParam, responseEntity, responseField
+    SOAPClient.doSoap(url, method, soapParam, responseEntity, responseField
         , function (data) {
             //console.log(data);
             success(data);

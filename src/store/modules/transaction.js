@@ -1,3 +1,4 @@
+import Vue from 'vue';
 
 export const TransMeta = {
     TIME_START: "time_start",
@@ -47,8 +48,17 @@ function refToSelectData(data, value, label) {
 }
 
 function getFormObject(state, key, tab) {
+    var debug = key == "formRequired" && tab == "TTEMPLATE_T2"
+    if (debug) {
+        console.log("getFormObjectByName", key, tab, name);
+    }
+
     try {
         var toRet = state[key][tab];
+        if (debug) {
+            console.log(state[key]);
+            console.log(state[key]["TTEMPLATE_T2"]);
+        }
         if (typeof toRet === "undefined") {
             return {};
         }
@@ -59,6 +69,7 @@ function getFormObject(state, key, tab) {
 }
 
 function getFormObjectByName(state, key, tab, name) {
+
     var data = getFormObject(state, key, tab);
     try {
         var toRet = data[name];
@@ -81,6 +92,13 @@ const getters = {
     transactionCurrentTabId: (state) => {
         try {
             return state.tabData[state.currentTabIndex].id
+        } catch (err) {
+            return null;
+        }
+    },
+    transactionNextTabId: (state) => {
+        try {
+            return state.tabData[state.currentTabIndex + 1].id
         } catch (err) {
             return null;
         }
@@ -147,7 +165,16 @@ const mutations = {
     },
     transSetFormObjectByName(state, { key, tab, name, data }) {
         //console.log("transSetFormValue", key, tab, data);
-        state[key][tab][name] = data;
+        if (typeof state[key] == "undefined") {
+            //state[key] = {};
+            Vue.set(state, key, {})
+        }
+        if (typeof state[key][tab] == "undefined") {
+            Vue.set(state[key], tab, {})
+        }
+
+        Vue.set(state[key][tab], name, data);
+        //console.log(key, tab, name, data);
     },
     transSetMetaData(state, { key, value }) {
         if (typeof state.metaData[key] == "undefined") {

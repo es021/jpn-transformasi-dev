@@ -64,7 +64,7 @@ const scss = [
   , "popup", "form-field"
   , "group-box", "pikaday"
   , "layout", "list-table"
-  , "alert"
+  , "alert", "nav-bar"
 ];
 
 scss.map((d, i) => {

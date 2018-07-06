@@ -8,6 +8,27 @@
       <!-- ################################################################### -->
       <!--  Maklumat Kunci Carian ############################################ -->
       <GroupBox title="Maklumat Kunci Carian">
+
+   <!-- Example for radiobox -->
+        <FormField type="radiobox" 
+          name="jantina" 
+          label="Jantina" 
+          :value="formValue['jantina']" 
+          :dataset="transactionDataset['jantina']"
+          :disabled="formDisabled['jantina']"
+          :required="formRequired['jantina']"
+          @onChange="onChange"></FormField>
+        
+        <!-- Example for checkbox -->
+        <FormField type="checkbox" 
+          name="dokumen" 
+          label="Dokumen" 
+          :valueArray="formValue['dokumen']"
+          :dataset="transactionDataset['jantina']"
+          :disabled="formDisabled['dokumen']"
+          :required="formRequired['dokumen']"
+          @onChange="onChange"></FormField>
+
           <FormField type="text" 
             name="no_permohonan" 
             label="No Permohonanan" 
@@ -70,31 +91,15 @@
             <LayoutRow>
               <LayoutColLeft>
                 <FormField type="text" 
-                  name="alamat_1" 
+                  name="alamat" 
                   label="Alamat" 
                   placeholder="" 
-                  :value="formValue['alamat_1']"
-                  :disabled="formDisabled['alamat_1']"
-                  :required="formRequired['alamat_1']"
+                  count=3
+                  :valueArray="formValue['alamat']"
+                  :disabled="formDisabled['alamat']"
+                  :required="formRequired['alamat']"
                   @onChange="onChange"></FormField>
 
-                <FormField type="text" 
-                  name="alamat_2" 
-                  label="" 
-                  placeholder="" 
-                  :value="formValue['alamat_2']"
-                  :disabled="formDisabled['alamat_2']"
-                  :required="formRequired['alamat_2']"
-                  @onChange="onChange"></FormField>
-
-                <FormField type="text" 
-                  name="alamat_3" 
-                  label="" 
-                  placeholder="" 
-                  :value="formValue['alamat_3']"
-                  :disabled="formDisabled['alamat_3']"
-                  :required="formRequired['alamat_3']"
-                  @onChange="onChange"></FormField>
               </LayoutColLeft>
               <LayoutColRight>
                 <FormField type="number" 
@@ -123,9 +128,9 @@
                   :disabled="formDisabled['negeri']"
                   :required="formRequired['negeri']"
                   @onChange="onChange"></FormField>  
-
               </LayoutColRight>
             </LayoutRow>
+
       </GroupBox>
 
       <!-- ################################################################### -->
@@ -238,7 +243,7 @@ import * as TabGeneralHelper from "../../helper/tab-general-helper";
 const showLocalDebug = false;
 
 export default {
-  name: "T382000_T1", // TODO - set name here same to this filename
+  name: "TabName",
   data() {
     return {
       // ######################################################################
@@ -287,6 +292,7 @@ export default {
         const checkInTbaeAdoptExt = () => {
           // get tbaeAdoptExt by BaeAplNo
           ApiHelper.soapRequest({
+            webService: "SoapWebService",
             method: "SsoapTbaeAdoptExt",
             param: {
               InTbaeAdoptExt: {
@@ -330,6 +336,7 @@ export default {
 
         const checkInTgpdPymtDetail = () => {
           ApiHelper.soapRequest({
+            webService: "SoapWebService",
             method: "SsoapTgpdPymtDetail",
             param: {
               InTgpdPymtDetail: {
@@ -360,7 +367,18 @@ export default {
       // ################################################################################
       // KEMASKINI -----------------------------------------------------------
       //TODO - set kemaskini on click event here
-      kemaskiniOnClick: () => {},
+      kemaskiniOnClick: () => {
+        this.setNextTabEnabled();
+      },
+      // ################################################################################
+      // Next Tab Validation -----------------------------------------------------------
+      //TODO - set next tab validation here
+      nextTabValidation: () => {
+        console.log("llalla");
+        this.setFormRequiredByTab("TTEMPLATE_T2", "kod_kecualian", true);
+
+        // set any value, disabled, required for next tab here
+      },
       // ################################################################################
       // OTHER STUFF -----------------------------------------------------------
       // Do Not Remove This
@@ -372,31 +390,35 @@ export default {
       showLocalDebug: showLocalDebug
     };
   },
-
-  created() {
-    this.startCreated(); // Do Not Remove This Line
-    this.kemaskiniDisabled = true;
+  mounted() {
+    this.startMounted();
 
     // TODO
     // set initial state of the input here
 
     // to set as Disabled use the following
     // this.setFormDisabled("name_of_the_input", true);
-
     // to set as Required use the following
     // this.setFormRequired("name_of_the_input", true);
 
+
+    this.setFormValue("alamat", ["asdas","Asfsa","Asdas"]);
+    this.setFormValue("dokumen",["L","P"])
+    this.setFormDisabled("dokumen", true);
+
+    
     this.setFormRequired("no_permohonan", true);
     this.setFormDisabled("no_kpt", true);
     //this.setFormDisabled("no_dokumen", true);
     //this.setFormDisabled("jenis_dokumen", true);
     this.setFormDisabled("nama_pemohon", true);
-    this.setFormDisabled("alamat_1", true);
-    this.setFormDisabled("alamat_2", true);
-    this.setFormDisabled("alamat_3", true);
+ 
     this.setFormDisabled("poskod", true);
     this.setFormDisabled("bandar", true);
     this.setFormDisabled("negeri", true);
+  },
+  created() {
+    this.startCreated(); // Do Not Remove This Line
   },
   beforeDestroy() {
     this.startBeforeDestroy();

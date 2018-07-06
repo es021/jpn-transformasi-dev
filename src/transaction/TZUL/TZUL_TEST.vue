@@ -56,13 +56,17 @@
           name="jantina" 
           label="Jantina" 
           :value="formValue['jantina']" 
+          :disabled="formDisabled['jantina']"
+          :required="formRequired['jantina']"
           :dataset="dataset.custom"
           @onChange="onChange"></FormField>
 
-                 <FormField type="checkbox" 
-          name="jantina" 
+        <FormField type="checkbox" 
+          name="jantina2" 
           label="Jantina" 
-          :value="formValue['jantina']" 
+          :value="formValue['jantina2']" 
+          :disabled="formDisabled['jantina2']"
+          :required="formRequired['jantina2']"
           :dataset="dataset.custom"
           @onChange="onChange"></FormField>
 
@@ -105,7 +109,7 @@ export default {
       // INTERNAL DATASET -----------------------------------------------------
       // TODO - set any internal dataset here if needed
       dataset: {
-        custom: [{ value: "1", label: "Ya" }, { value: "0", label: "Tidak" }, { value: "0", label: "Tidak" }]
+        custom: [{ value: "1", label: "Ya" }, { value: "0", label: "Tidak" }, { value: "2", label: "Tidak La" }]
       },
       // ######################################################################
       // PERTANYAAN -----------------------------------------------------------
@@ -131,7 +135,6 @@ export default {
     // TODO
     // set initial state of the input here
 
-    this.pertanyaanLoading = true;
 
     // to set as Disabled use the following
     // this.setFormDisabled("name_of_the_input", true);
@@ -139,9 +142,12 @@ export default {
     // to set as Required use the following
     // this.setFormRequired("name_of_the_input", true);
 
-    this.setFormDisabled("nama_pemohon", true);
 
     this.setFormRequired("umur_pemohon", true);
+
+    this.setFormDisabled("jantina", true);
+    this.setFormRequired("jantina2", true);
+
   },
   beforeDestroy() {
     this.startBeforeDestroy();

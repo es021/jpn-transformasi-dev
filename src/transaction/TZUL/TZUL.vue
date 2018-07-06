@@ -9,7 +9,7 @@
       <AppNavBar :data="tabData"></AppNavBar>
       <component :is="transactionCurrentTabId"></component>
     </div>
-    <!-- <AppDebug></AppDebug> -->
+    <AppDebug></AppDebug>
   </div>
 </template>
 

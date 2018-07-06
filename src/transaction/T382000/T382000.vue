@@ -22,10 +22,14 @@ var tabData = [];
 
 // intialize tab component
 // TODO - Please add as much tab as needed here
+
 // Tab 1
 import T382000_T1 from "./T382000_T1";
 Vue.component("T382000_T1", T382000_T1);
 tabData.push({ id: "T382000_T1", label: "Permohonan" });
+
+// Tab 1
+//tabData.push({ id: "T382000_T1", label: "Permohonan 2" });
 
 // Tab 2
 import T382000_T2 from "./T382000_T2";

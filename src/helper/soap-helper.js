@@ -1,3 +1,5 @@
+import { SoapErrorAttr, SoapErrorName } from "../config/app-config";
+
 /*****************************************************************************\
 
  Javascript "SOAP Client" library
@@ -128,8 +130,8 @@ SOAPClientClass.prototype.getError = function (xmlRes) {
     var error = null;
     try {
         var xmlResponse = xmlRes.documentElement;
-        var errorEl = xmlResponse.getElementsByTagName("ErrorWsGeneral");
-        error = errorEl[0].getElementsByTagName("Char50")[0].innerHTML;
+        var errorEl = xmlResponse.getElementsByTagName(SoapErrorName);
+        error = errorEl[0].getElementsByTagName(SoapErrorAttr)[0].innerHTML;
 
         if (error == "") {
             error = null;

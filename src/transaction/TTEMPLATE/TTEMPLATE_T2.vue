@@ -38,7 +38,6 @@
               :disabled="formDisabled['keterangan_pengecualian']"
               :required="formRequired['keterangan_pengecualian']"
               @onChange="onChange"></FormField>
-
           </LayoutColLeft>
 
           <LayoutColRight>
@@ -359,7 +358,7 @@
        
     </LayoutColFull>
 </LayoutRow>
-<button @click="getStartTime">getStartTime</button>
+
 <!-- this is action of our tab pertanyaan, kemaskini, etc -->
 <AppActionTab 
 :pertanyaanDisabled="pertanyaanDisabled"
@@ -406,7 +405,7 @@ import * as PaymentHelper from "../../helper/payment-helper";
 const showLocalDebug = false;
 
 export default {
-  name: "T382000_T1", // TODO - set name here same to this filename
+  name: "TabName",
   data() {
     return {
       // ######################################################################
@@ -485,6 +484,15 @@ export default {
         }
       },
       // ################################################################################
+      // Next Tab Validation -----------------------------------------------------------
+      //TODO - set next tab validation here
+      nextTabValidation: () => {
+        console.log("llalla");
+        //this.setFormRequiredByTab("TTEMPLATE_T2", "kod_kecualian", true);
+
+        // set any value, disabled, required for next tab here
+      },
+      // ################################################################################
       // OTHER STUFF -----------------------------------------------------------
       // Do Not Remove This
       ...TabGeneralHelper.getExtraData(),
@@ -495,23 +503,23 @@ export default {
       showLocalDebug: showLocalDebug
     };
   },
-
   created() {
     this.startCreated(); // Do Not Remove This Line
+  },
+  mounted() {
+    this.startMounted();
 
-    this.pertanyaanDisabled = true;
+    // this.setFormValue("kd_jenis_kad", "MyDebit");
+    // this.setFormValue("jumlah_bayaran", 0);
 
-    this.setFormValue("kd_jenis_kad", "MyDebit");
-    this.setFormValue("jumlah_bayaran", 0);
+    // // DEBUG
+    // this.setFormValue("jumlah_perlu_dibayar", 100);
 
-    // DEBUG
-    this.setFormValue("jumlah_perlu_dibayar", 100);
-
-    // TODO
-    // set initial state of the input here
-    this.setFormRequired("kod_kecualian", true);
-    this.setFormDisabled("bayaran_permohonan", true);
-    this.setFormDisabled("jumlah_perlu_dibayar", true);
+    // // TODO
+    // // set initial state of the input here
+    // this.setFormRequired("kod_kecualian", true);
+    // this.setFormDisabled("bayaran_permohonan", true);
+    // this.setFormDisabled("jumlah_perlu_dibayar", true);
   },
   beforeDestroy() {
     this.startBeforeDestroy();

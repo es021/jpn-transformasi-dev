@@ -2,44 +2,52 @@
 <template>
   <div class="form-field" :class="{error:hasError()}">
     <div class="ff-flex">
-      <div class="ff-label" :title="name" :class="{empty:label==''}">{{label}}</div>
-      <div class="ff-item" :class="{'auto-height':isCheckbox()|| isRadiobox()}">
+      <div class="ff-label" :style="labelStyle" :title="name">            
+        {{label}}
+      </div>
+      <div class="ff-item" :style="itemStyle" :class="{'auto-height':isCheckbox() || isRadiobox()}">
         
-        <input  v-if="isInput()" :ref="name" @change="onChange" 
-          :required="required" :disabled="disabled" :value="value" :type="type" :name="name" 
+        <input v-if="isInput() && count == 1" :ref="name" @change="onChange" 
+          :class="{required:required}" :disabled="disabled" :value="value" :type="type" :name="name" 
           :step="step"
           :placeholder="placeholder"/>
+
+        <!--for more than 1 field -->
+        <input v-if="count > 1" v-for="(d,i) in arrForCount" :key="`${name}_${i+1}`" :ref="`${name}_${i+1}`" @change="onChange" 
+          :class="{required:required}" class="ff-extra" :disabled="disabled" :value="valueArray[i]" :type="type" :name="`${name}_${i+1}`" 
+          :step="step"
+          :placeholder="placeholder"/> 
 
         <!-- type we use input because we already use pickaday lib !-->
         <!-- if we use type date here will mess up state apa ntah -->
          <input  v-if="isDate()" :ref="name" @change="onChange" 
-          :required="required" :disabled="disabled" :value="value" type="input" :name="name" 
+          :class="{required:required}" :disabled="disabled" :value="value" type="input" :name="name" 
           :placeholder="placeholder"/>
 
-        <select v-if="isSelect()" :ref="name" @change="onChange" :required="required" :disabled="disabled" :value="value" :name="name">
+        <select v-if="isSelect()" :ref="name" @change="onChange" :class="{required:required}" :disabled="disabled" :value="value" :name="name">
           <option v-for="(d,i) in dataset" :key="`${name}_${i}`" :value="d.value">
             {{d.label}}
           </option>
         </select>
 
-         <span v-if="isRadiobox()">
-           <div v-for="(d,i) in dataset" :class="{ffDisabled:disabled}" class="radiobox-container" :key="`${name}_${i}`">
-             <input :disabled="disabled" :required="required" @change="onChange" type="radio" :name="name" :ref="name" :value="d.value" :checked="d.value == value">
+         <div class="box-container"  :class="{'ff-disabled':disabled,'ff-required':required}" v-if="isRadiobox()">
+           <div v-for="(d,i) in dataset" class="radiobox-container" :key="`${name}_${i}`">
+             <input :disabled="disabled" :class="{required:required}" @change="onChange" type="radio" :name="name" :ref="name" :value="d.value" :checked="d.value == value">
              <span>{{d.label}}</span>
            </div>
-        </span>
+        </div>
 
-        <span v-if="isCheckbox()">
-           <div v-for="(d,i) in dataset" :class="{ffDisabled:disabled}" class="checkbox-container"  :key="`${name}_${i}`">
-             <input :disabled="disabled" :required="required" @change="onChange" type="checkbox" :name="name"  :ref="name" :value="d.value" 
+        <div class="box-container"  :class="{'ff-disabled':disabled,'ff-required':required}" v-if="isCheckbox()">
+           <div v-for="(d,i) in dataset" class="checkbox-container"  :key="`${name}_${i}`">
+             <input :disabled="disabled" :class="{required:required}" @change="onChange" type="checkbox" :name="name"  :ref="name" :value="d.value" 
             :checked="valueArray.indexOf(d.value) >= 0">
              <span>{{d.label}}</span>
            </div>
-        </span>
+        </div>
 
-        <div  v-if="hasError()" class="ff-error">{{error}}</div>
       </div>
     </div>
+    <div  :style="itemStyle"  v-if="hasError()" class="ff-error">{{error}}</div>
   </div>
 </template>
 
@@ -51,8 +59,12 @@ import Validate from "../helper/validate-helper";
 export default {
   name: "FormField",
   props: {
+    count: {
+      type: [String, Number],
+      default: 1
+    },
     value: {
-      type: [String, Number], // {value:""}
+      type: [String, Number, Array], // {value:""}
       default: null
     },
     disabled: {
@@ -101,6 +113,10 @@ export default {
         //console.log("default validate");
         return false;
       }
+    },
+    labelWidth: {
+      type: Number,
+      default: 30
     }
   },
   // watch prop change
@@ -118,11 +134,24 @@ export default {
   },
   data() {
     return {
+      labelStyle: {},
+      itemStyle: {},
       error: false,
-      currentValue: null
+      currentValue: null,
+      arrForCount: []
     };
   },
   created() {
+    // create arr for count
+    if (this.count > 1) {
+      for (var i = 0; i < this.count; i++) {
+        this.arrForCount.push("");
+      }
+    }
+
+    //console.log(labelWidth);
+    this.labelStyle = { width: this.labelWidth + "%" };
+    this.itemStyle = { width: 100 - this.labelWidth + "%" };
     this.doValidation();
   },
   mounted() {

@@ -1,45 +1,57 @@
 @import './define/_constant.scss';
 
+$FF_BLUE_BACK : rgb(216,237,247);
+$FF_BLUE_TEXT : rgb(49,112,155);
+$FF_BLUE_BORDER : #ccc;
+
 .form-field{
+    //background-color: blue;
     text-align: left;
     margin-bottom: 15px;
+    border-radius: 3px;
+    overflow: hidden;
+    border:solid 0.5px $FF_BLUE_BORDER;
+    display: flex;
+    flex-flow: column;
+
     .ff-flex{
       display: flex;
       align-items: center;
+      justify-content: flex-start;
       //justify-content: space-between;
     }
 
     .ff-label{
+        background-color: $FF_BLUE_BACK;
         flex-grow: 1;
-        color:$COLOR-BLUE;
-        margin-right: 10px;
-        max-width: 125px;
-        text-align: right;
+        color:$FF_BLUE_TEXT;
+        width: 40%;
+        align-self: stretch;
+        padding: 5px;
+        padding-left: 10px;
+        border-right: none;
+        overflow: hidden;
     }
 
-    // .ff-label.empty{
-    //     margin-right: 35px;
-    // }
-
     .ff-item{
-        flex-grow: 1;
-        height: 25px;
+        width: 60%;
+
         input,select{
             width: 100%;
-            height: 100%;
-            border: solid 1px gray;
-            border-radius: 5px;
+            border: solid 1px $FF_BLUE_BORDER;
+            //border-radius: 5px;
             padding: 0px 5px;
+            height: 30px;
         }
 
-        input:required, select:required{
+        input.required, select.required{
+            border: solid 1px $FF_BLUE_BORDER;
             background: $COLOR-RED-LIGHT;
-            border: 1px $COLOR-RED-DARK solid;
         }
 
         input:disabled, select:disabled{
             background: $COLOR-GRAY-LIGHT;
-            border: 1px gray solid;
+            border: 1px $FF_BLUE_BORDER solid;
             color: #3f3f3f;
         }
 
@@ -48,26 +60,42 @@
             box-shadow: 1px 1px 6px 1px rgba(0, 0, 0, 0.4);
         }
 
-        .ff-error{
-            text-align: left;
-            margin-top:3px;
-            color:$COLOR-RED;
-            font-size: 85%;
-        }
 
-        .radiobox-container,.checkbox-container{
-            input{
-                margin: 0;
-                margin-right: 10px;
-                width: auto;
-            }
-            height: 25px;
+
+        .box-container{
             display: flex;
+            width: 100%;
+            height: 100%;
+            .radiobox-container,.checkbox-container{
+                input{
+                    margin: 0;
+                    margin-right: 10px;
+                    width: auto;
+                }
+                padding: 4px 10px;
+                display: flex;
+                align-items: center;
+                font-size: 13px;
+            }
+        }
+      
+
+        .ff-disabled{
+            background: #e1e1e1;
+            color:#727272;
         }
 
-        .ffDisabled{
-            color:#3f3f3f;
+        .ff-required{
+            background: $COLOR-RED-LIGHT;
         }
+    }
+
+    .ff-extra{
+        margin-bottom: 17px;
+    }
+
+    .ff-extra:last-of-type{
+        margin-bottom: 0px;
     }
 
     .ff-item.lg{
@@ -79,11 +107,15 @@
 
     .ff-item.auto-height{
         height: auto;
+        border: solid 1px $FF_BLUE_BORDER;
     }
 
-   
-  }
+    .ff-error{
+        text-align: left;
+        margin-top:3px;
+        color:$COLOR-RED;
+        font-size: 85%;
+        align-self: flex-end;
+    }
+}
 
-  .form-field.error{
-    margin-bottom: 28px;
-  }

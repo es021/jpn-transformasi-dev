@@ -5,17 +5,17 @@
         :disabled="isTabDisabled(d.id)"
         :class="{active: i == transactionState.currentTabIndex}" 
         class="jnv-item" v-for="(d,i) in data" :key="d.id">
-        <b>{{d.label}}</b>
+        {{d.label}}
       </button>
     </div>  
     <div>  
       <button class="jnv-item" 
         @click="changeIndex(transactionState.currentTabIndex - 1)" 
-        :disabled="!isPrevNextEnabled('prev')"><b>< PREV</b>
+        :disabled="!isPrevNextEnabled('prev')">< PREV
       </button><button 
         @click="changeIndex(transactionState.currentTabIndex + 1)" 
         class="jnv-item" 
-        :disabled="!isPrevNextEnabled('next')"><b>NEXT ></b></button>
+        :disabled="!isPrevNextEnabled('next')">NEXT ></button>
     </div>
   </div>
 </template>
@@ -80,40 +80,4 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-.jpn-nav-bar {
-  display: flex;
-  margin-bottom: 10px;
-  justify-content: space-between;
-
-  .jnv-item {
-    // general
-    padding: 10px;
-    border-radius: 13px 13px 0px 0px;
-    border: black solid 1px;
-    cursor: pointer;
-
-    // color for normal
-    color: white;
-    border-color: #c5660e;
-    background-color: #f5871f;
-  }
-
-  .jnv-item:hover,
-  .jnv-item.active {
-    color: #f5871f;
-    border-color: #c5660e;
-    background-color: white;
-    border-bottom-color: white;
-  }
-
-  .jnv-item[disabled="disabled"] {
-    cursor: not-allowed;
-    color: #4a4a4a;
-    background-color: #8f8f8f;
-    border-color: #545454;
-  }
-}
-</style>
 

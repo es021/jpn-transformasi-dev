@@ -16,6 +16,7 @@ export function getGetters() {
         "transactionDataset",
         "transactionRefTable",
         "transactionCurrentTabId",
+        "transactionNextTabId",
         "transactionMetaData"
     ];
 }
@@ -67,6 +68,11 @@ export function getAllMethod() {
 
         },
         // #########################################################################
+        // Functions For Tab
+        setNextTabEnabled() {
+            this.transAddEnabledTab(this.transactionNextTabId);
+        },
+        // #########################################################################
         // Functions For Transaction MetaData
         getStartTime() {
             // YYYY-MM-DD-HH.MM.SS.XXXXXX
@@ -113,6 +119,9 @@ export function getAllMethod() {
         },
         // #########################################################################
         // Functions For Form Value
+        setFormValueByTab(tab, name, value) {
+            this.setOtherTabData(tab, "formValue", name, value)
+        },
         setFormValue(name, value) {
             this.setThisData("formValue", name, value)
         },
@@ -158,6 +167,9 @@ export function getAllMethod() {
         },
         // #########################################################################
         // Functions For Form Disabled
+        setFormDisabledByTab(tab, name, value) {
+            this.setOtherTabData(tab, "formDisabled", name, value)
+        },
         setFormDisabled(name, bool) {
             if (bool) {
                 // set required to false first
@@ -168,6 +180,9 @@ export function getAllMethod() {
 
         // #########################################################################
         // Functions For Form Required
+        setFormRequiredByTab(tab, name, value) {
+            this.setOtherTabData(tab, "formRequired", name, value)
+        },
         setFormRequired(name, bool) {
             if (bool) {
                 // set disabled to false first
@@ -190,6 +205,17 @@ export function getAllMethod() {
                 this.transSetFormObjectByName({ key: key, tab: tab, name: name, data: value })
             }
         },
+        setOtherTabData(tab, key, name, value) {
+            console.log("setOtherTabData", tab, key, name, value)
+            // first time not in store yet
+            // if (this.transactionFormObjectByName(key, tab, name) == null) {
+            //     this.$set(this[key], name, value)
+            // }
+            // // recreate from store
+            // else {
+            this.transSetFormObjectByName({ key: key, tab: tab, name: name, data: value })
+            //}
+        },
         onChange(name, value, error, ref) {
             //console.log("onChange parent", name, value, error);
 
@@ -204,6 +230,9 @@ export function getAllMethod() {
             this.setFormRef(name, ref);
         },
         getFormObjectFromStore(key) {
+            if (key == "formRequired") {
+                console.log(key, this.tabId);
+            }
             return this.transactionFormObject(key, this.tabId);
         },
         setFormObjectToStore(key) {
@@ -216,17 +245,24 @@ export function getAllMethod() {
 
         // #########################################################################
         // Hook
+        // Tab 2 created -> Tab 1 before destroy -> Tab 2 Mounted 
         startCreated() {
+            //console.log("startCreated");
             // tabId need to be set first
             this.tabId = this.transactionCurrentTabId;
             this.Validate = Validate;
-
+        },
+        startMounted() {
+            //console.log("startMounted");
+            // need to be here sebab masa before destroy akan set value utk tab lain
             this.formValue = this.getFormObjectFromStore("formValue");
             this.formDisabled = this.getFormObjectFromStore("formDisabled");
             this.formRequired = this.getFormObjectFromStore("formRequired");
             this.formError = this.getFormObjectFromStore("formError");
         },
         startBeforeDestroy() {
+            //console.log("startBeforeDestroy");
+            this.nextTabValidation();
             this.setFormObjectToStore("formValue");
             this.setFormObjectToStore("formDisabled");
             this.setFormObjectToStore("formRequired");

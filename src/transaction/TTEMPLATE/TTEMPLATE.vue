@@ -9,7 +9,7 @@
       <AppNavBar :data="tabData"></AppNavBar>
       <component :is="transactionCurrentTabId"></component>
     </div>
-    <!-- <AppDebug></AppDebug> -->
+    <AppDebug></AppDebug>
   </div>
 </template>
 
@@ -18,23 +18,27 @@
 // Dont Change this
 import Vue from "vue";
 import * as TabParentGeneralHelper from "../../helper/tab-parent-general-helper";
-var tabData = [];
 
 // intialize tab component
+var tabData = [];
+
 // TODO - Please add as much tab as needed here
 // Tab 1
-import T382000_T1 from "./T382000_T1";
-Vue.component("T382000_T1", T382000_T1);
-tabData.push({ id: "T382000_T1", label: "Permohonan" });
+var tabId = "TTEMPLATE_T1"; // todo - change this
+var tabLabel = "Pertanyaan"; // todo - change this
+var tab = require("./TTEMPLATE_T1"); // todo - change this
+Vue.component(tabId, tab.default);
+tabData.push({ id: tabId, label: tabLabel });
 
 // Tab 2
-import T382000_T2 from "./T382000_T2";
-Vue.component("T382000_T2", T382000_T2);
-tabData.push({ id: "T382000_T2", label: "Bayaran" });
+var tabId = "TTEMPLATE_T2";
+var tabLabel = "Bayaran";
+var tab = require("./TTEMPLATE_T2");
+Vue.component(tabId, tab.default);
+tabData.push({ id: tabId, label: tabLabel });
 
 // set which tab will be enabled initially
-//const initialTabEnabled = ["T382000_T1"];
-const initialTabEnabled = ["T382000_T1", "T382000_T2"];
+const initialTabEnabled = ["TTEMPLATE_T1"];
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // main component for this transaction
@@ -53,19 +57,19 @@ export default {
         },
         {
           table: "Ref007DocumentType",
-          field: ["R007DocTypeCd", "R007DocTypeDesc"] 
+          field: ["R007DocTypeCd", "R007DocTypeDesc"]
         },
         {
-          table: "Ref011Country", 
-          field: [] 
+          table: "Ref011Country",
+          field: []
         },
         {
           table: "Ref008State",
-          field: [] 
+          field: []
         },
         {
-          table: "Ref009City", 
-          field: [] 
+          table: "Ref009City",
+          field: []
         }
       ],
       // ################################

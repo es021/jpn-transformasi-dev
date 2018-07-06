@@ -251,6 +251,9 @@ export default {
       pertanyaanOnClick: () => {
         // Define variable and function in process pertanyaan
         var noPermohonan = this.getFormValue("no_permohonan");
+        
+        
+        this.setFormDisabled("", true);
 
         const startProcessPertanyaan = () => {
           // Do Front End Validation first
