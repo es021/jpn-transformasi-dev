@@ -51,7 +51,7 @@
               :required="formRequired['bayaran_permohonan']"
               @onChange="onChange"></FormField>
 
-            <FormField type="text" 
+            <FormField type="number" 
               name="jumlah_perlu_dibayar" 
               label="Jumlah Perlu Dibayar" 
               placeholder="" 
@@ -487,7 +487,7 @@ export default {
       // Next Tab Validation -----------------------------------------------------------
       //TODO - set next tab validation here
       nextTabValidation: () => {
-        console.log("llalla");
+        //console.log("llalla");
         //this.setFormRequiredByTab("TTEMPLATE_T2", "kod_kecualian", true);
 
         // set any value, disabled, required for next tab here
@@ -681,7 +681,13 @@ export default {
       var jumlahBayaran = this.getFormValue("jumlah_bayaran");
       jumlahBayaran = Number.parseFloat(jumlahBayaran);
       jumlah = Number.parseFloat(jumlah);
-      this.setFormValue("jumlah_bayaran", jumlahBayaran + jumlah);
+
+      if (!isNaN(jumlahBayaran)) {
+        jumlah += jumlahBayaran;
+      }
+
+      console.log("updateJumlahBayaran", jumlahBayaran, jumlah);
+      this.setFormValue("jumlah_bayaran", jumlah);
     },
     batalTambahBayaran() {
       this.resetCaraBayaran();

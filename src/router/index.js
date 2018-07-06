@@ -10,22 +10,22 @@ Vue.use(Router)
 
 const router = new Router({
   routes: [
-    // {
-    //   path: '/',
-    //   name: 'AppHome',
-    //   component: AppHome
-    // },
+    {
+      path: '/',
+      name: 'FingerprintResponse',
+      component: FingerprintResponse
+    },
     //http://localhost:8081/#/transaction/T385150
     {
       path: '/transaction/:transaction_code',
       name: 'AppHome',
       component: AppHome
     },
-    {
-      path: '/fingerprint-response',
-      name: 'FingerprintResponse',
-      component: FingerprintResponse
-    },
+    // {
+    //   path: '/fingerprint-response',
+    //   name: 'FingerprintResponse',
+    //   component: FingerprintResponse
+    // },
     {
       path: '/test',
       name: 'AppTest',

@@ -5,11 +5,11 @@
       <br>{{refTableCompleted / refTable.length * 100}} %<br><br>
     </div>
     <div v-else>
-      <AppBreadcrumbs :text="breadcrumbsText"></AppBreadcrumbs>
+      <AppBreadcrumbs :data="breadcrumbs"></AppBreadcrumbs>
       <AppNavBar :data="tabData"></AppNavBar>
       <component :is="transactionCurrentTabId"></component>
     </div>
-    <AppDebug></AppDebug>
+    <!-- <AppDebug></AppDebug> -->
   </div>
 </template>
 
@@ -21,21 +21,24 @@ import * as TabParentGeneralHelper from "../../helper/tab-parent-general-helper"
 
 // intialize tab component
 var tabData = [];
+var tab, tabId, tabLabel;
 
 // TODO - Please add as much tab as needed here
 // Tab 1
-var tabId = "TTEMPLATE_T1"; // todo - change this
-var tabLabel = "Pertanyaan"; // todo - change this
-var tab = require("./TTEMPLATE_T1"); // todo - change this
+tab = require("./TTEMPLATE_T1"); // todo - change this
+tabId = "TTEMPLATE_T1"; // todo - change this
+tabLabel = "Pertanyaan"; // todo - change this
 Vue.component(tabId, tab.default);
 tabData.push({ id: tabId, label: tabLabel });
 
 // Tab 2
-var tabId = "TTEMPLATE_T2";
-var tabLabel = "Bayaran";
-var tab = require("./TTEMPLATE_T2");
+tab = require("./TTEMPLATE_T2");
+tabId = "TTEMPLATE_T2";
+tabLabel = "Bayaran Test Test";
 Vue.component(tabId, tab.default);
 tabData.push({ id: tabId, label: tabLabel });
+
+
 
 // set which tab will be enabled initially
 const initialTabEnabled = ["TTEMPLATE_T1"];
@@ -47,8 +50,16 @@ export default {
   data() {
     return {
       // TODO - change breadcrumbs text here
-      breadcrumbsText:
-        "PENGANGKATAN >> BAYARAN >> 382000 >> BAYARAN PENGANGKATAN MELALUI PERINTAH MAHKAMAH",
+      // url just leave blank for now if not sure, can revisit later
+      breadcrumbs: [
+        { label: "Urusniaga Utama", url: "urusniaga-utama" },
+        { label: "Pengangkatan eJPN", url: "pengangkatan-ejpn" },
+        {
+          label: "Pendaftaran Pengangkatan Mahkamah",
+          url: "pengangkatan-ejpn-pendaftaran-pengangkatan-mahkamah"
+        },
+        { label: "Bayaran Pendaftaran Pengangkatan Mahkamah", url: null }
+      ],
       // TODO - load any ref table needed here
       refTable: [
         {

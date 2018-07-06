@@ -3,7 +3,7 @@
 <div>
     <!-- this is where the form field is put in our tab -->
 <LayoutRow>
-  <LayoutColFull>
+  <LayoutColLeft>
 
       <!-- ################################################################### -->
       <!--  Maklumat Kunci Carian ############################################ -->
@@ -39,9 +39,10 @@
             :validate="Validate.noPermohonan"
             @onChange="onChange" ></FormField>
       </GroupBox>
-
+      </LayoutColLeft>
       <!-- ################################################################### -->
       <!--  Maklumat Pemohon ################################################ -->
+      <LayoutColRight>
       <GroupBox title="Maklumat Pemohon">
           <FormField type="text" 
             name="no_kpt" 
@@ -194,7 +195,7 @@
           
       </GroupBox>
        
-    </LayoutColFull>
+    </LayoutColRight>
 </LayoutRow>
 
 <!-- this is action of our tab pertanyaan, kemaskini, etc -->
@@ -240,6 +241,8 @@ import Vue from "vue";
 import * as ApiHelper from "../../helper/api-helper";
 import { SoapErr } from "../../helper/soap-helper";
 import * as TabGeneralHelper from "../../helper/tab-general-helper";
+import * as PaymentHelper from "../../helper/payment-helper";
+
 const showLocalDebug = false;
 
 export default {
@@ -254,6 +257,10 @@ export default {
       // PERTANYAAN -----------------------------------------------------------
       //TODO - set pertanyaan on click event here
       pertanyaanOnClick: () => {
+        this.startFingerprint(res => {
+          console.log("Do Whatever You Want With The Response Here", res);
+        });
+        return;
         // Define variable and function in process pertanyaan
         var noPermohonan = this.getFormValue("no_permohonan");
 
@@ -305,9 +312,11 @@ export default {
               data = data[0];
               this.setFormValue("no_kpt", data["BaeCfrmHscNo"]);
               this.setFormValue("nama_pemohon", data["BaeCfrmName"]);
-              this.setFormValue("alamat_1", data["BaeCfrmAddr1"]);
-              this.setFormValue("alamat_2", data["BaeCfrmAddr2"]);
-              this.setFormValue("alamat_3", data["BaeCfrmAddr3"]);
+              this.setFormValue("alamat", [
+                data["BaeCfrmAddr1"],
+                data["BaeCfrmAddr2"],
+                data["BaeCfrmAddr2"]
+              ]);
               this.setFormValue("poskod", data["BaeCfrmPostcd"]);
               this.setFormValue("bandar", data["BaeCfrmCityCd"]);
               this.setFormValue("negeri", data["BaeCfrmStateCd"]);
@@ -374,10 +383,10 @@ export default {
       // Next Tab Validation -----------------------------------------------------------
       //TODO - set next tab validation here
       nextTabValidation: () => {
-        console.log("llalla");
-        this.setFormRequiredByTab("TTEMPLATE_T2", "kod_kecualian", true);
-
         // set any value, disabled, required for next tab here
+        this.setFormRequiredByTab("TTEMPLATE_T2", "kod_kecualian", true);
+        this.setFormValueByTab("TTEMPLATE_T2", "jumlah_perlu_dibayar", 120);
+        this.setFormDisabledByTab("TTEMPLATE_T2", "jumlah_perlu_dibayar", true);
       },
       // ################################################################################
       // OTHER STUFF -----------------------------------------------------------
@@ -393,26 +402,31 @@ export default {
   mounted() {
     this.startMounted();
 
+  this.pertanyaanDisabled = true;
     // TODO
     // set initial state of the input here
 
-    // to set as Disabled use the following
+    // to set as Disabled
     // this.setFormDisabled("name_of_the_input", true);
-    // to set as Required use the following
+
+    // to set as Required
     // this.setFormRequired("name_of_the_input", true);
 
+    // to set form value
+    // this.setFormValue("no_permohonan","03401203521-125391293-12341234");
 
-    this.setFormValue("alamat", ["asdas","Asfsa","Asdas"]);
-    this.setFormValue("dokumen",["L","P"])
+    // to set form value with multiple value
+    // (checkbox or input with more than one field (as set by count))
+    // use array
+    // this.setFormValue("alamat", ["asdas","Asfsa","Asdas"]);
+    // this.setFormValue("dokumen", ["L", "P"]);
+
+    this.setFormValue("dokumen", ["L", "P"]);
     this.setFormDisabled("dokumen", true);
 
-    
     this.setFormRequired("no_permohonan", true);
     this.setFormDisabled("no_kpt", true);
-    //this.setFormDisabled("no_dokumen", true);
-    //this.setFormDisabled("jenis_dokumen", true);
     this.setFormDisabled("nama_pemohon", true);
- 
     this.setFormDisabled("poskod", true);
     this.setFormDisabled("bandar", true);
     this.setFormDisabled("negeri", true);

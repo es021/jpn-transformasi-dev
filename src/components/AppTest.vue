@@ -15,16 +15,17 @@
 </template>
 
 <script>
+
 export default {
   name: "AppExit",
   data() {
     return {
       toCamelCase: "",
       camelCased: "",
-      movie: "Ant Man 2"
+      movie: ""
     };
   },
-  
+
   methods: {
     onClickTest() {
       this.movie = "lalala";

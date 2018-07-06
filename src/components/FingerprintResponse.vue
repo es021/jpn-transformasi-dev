@@ -1,9 +1,11 @@
 
 <template>
   <div>
-    <br><br>
-    Fingerprint Response From Jar<br>
-    {{response}}
+    <div v-if="isFingerprint">
+      <br><br>
+      Fingerprint Response<br>
+      {{response}}
+    </div>
   </div>
 </template>
 
@@ -15,11 +17,20 @@ export default {
   name: "FingerprintResponse",
   data() {
     return {
-      response: ""
+      response: "",
+      isFingerprint: false
     };
   },
   created() {
-    this.response = _GET("name");
+    var res = _GET("name");
+    if (res !== null) {
+      this.isFingerprint = true;
+    } else {
+      return;
+    }
+    res = res.replace("#", "");
+    res = res.replace("/", "");
+    this.response = res;
 
     var toStore = {
       err: null,
@@ -34,6 +45,8 @@ export default {
       toStore.err = window.location.href;
     }
     localStorage.setItem(STORE_FINGERPRINT, JSON.stringify(toStore));
+    console.log("here");
+    window.close();
   },
   mounted() {}
 };

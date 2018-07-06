@@ -5,7 +5,7 @@
     <div v-if="resStore === null">
       <h3>Masukkan ID Penyelia</h3>
       <div class="form-field">
-        <div class="ff-item lg" >
+        <div class="ff-item ff-no-label" >
           <input type="text" 
               name="penyelia_id" 
               label="Masukkan ID Penyelia" 
@@ -85,11 +85,14 @@ export default {
 
       this.initSah();
 
-      var callbackUrl = AppRoot + "/#/fingerprint-response";
+      var callbackUrl = AppRoot; // "/#/fingerprint-response";
+
       var apiUrl =
-        `/aidy_punya_url.jsp` +
+        location.origin +
+        `/fingerprint/myDevice.jsp` +
         `?spvrid=${penyeliaId}` +
-        `&path=${callbackUrl}`;
+        `&path=${callbackUrl}` +
+        `&codeBase=${location.origin}`;
 
       // open window popup for jsp fingerprint
       // the jar will open up our callback url
@@ -99,19 +102,19 @@ export default {
         top = 50,
         left = 50;
 
-      //openWindowPopup(apiUrl, STORE_FINGERPRINT, width, height, top, left);
+      openWindowPopup(apiUrl, STORE_FINGERPRINT, width, height, top, left);
 
       // test je ni
-      setTimeout(() => {
-        openWindowPopup(
-          callbackUrl + "?name=1",
-          STORE_FINGERPRINT,
-          width,
-          height,
-          top,
-          left
-        );
-      }, 1000);
+      // setTimeout(() => {
+      //   openWindowPopup(
+      //     callbackUrl + "?name=1",
+      //     STORE_FINGERPRINT,
+      //     width,
+      //     height,
+      //     top,
+      //     left
+      //   );
+      // }, 1000);
 
       // this function will keep checking if local storage STORE_FINGERPRINT
       // is updated or not

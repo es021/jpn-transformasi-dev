@@ -19,6 +19,7 @@
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
+import { HomeRoot } from "../config/app-config";
 
 export default {
   name: "AppActionTab",
@@ -62,6 +63,7 @@ export default {
     menuUtamaOnClick: {
       type: Function,
       default: () => {
+        window.location = HomeRoot;
         console.log("menuUtamaOnClick default");
       }
     }

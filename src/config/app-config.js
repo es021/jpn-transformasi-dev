@@ -14,9 +14,12 @@ export const SoapErrorName = "ErrorWsGeneral";
 export const SoapErrorAttr = "Char50";
 
 
-export const Domain = isProd ? location.origin : "http://localhost:8081"
+export const Domain = isProd ? location.origin : "http://localhost:8081";
 export const AppRoot = isProd ? `${Domain}/jpn-transformasi` : Domain;
 export const WebServiceRoot = isProd ? `${Domain}/home-webservice` : "http://localhost:8080/home-webservice";
+
+export const HomeRoot = `${Domain}/home/#/`;
+export const HomePage = `${Domain}/home/#/page/`;
 
 export const AppPath = {
     Asset: AppRoot + "/asset",

@@ -56,6 +56,11 @@ export function getAllMethod() {
             this.loadAllRefTable();
         },
         loadAllRefTable() {
+            if (this.refTable.length <= 0) {
+                this.loading = false;
+                return;
+            }
+
             ApiHelper.loadRefTable(
                 this.refTable,
                 (key, data) => {

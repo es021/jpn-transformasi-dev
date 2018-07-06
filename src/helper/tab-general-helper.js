@@ -197,7 +197,15 @@ export function getAllMethod() {
             var tab = this.tabId;
 
             // first time not in store yet
+            var fromStore = this.transactionFormObjectByName(key, tab, name);
+            //console.log("fromStore", fromStore);
+            //console.log("fromStore", this[key][name]);
+            //this.transSetFormObjectByName({ key: key, tab: tab, name: name, data: value })
+
+            //return;
             if (this.transactionFormObjectByName(key, tab, name) == null) {
+                //console.log("fromStore", this[key], name, value);
+
                 this.$set(this[key], name, value)
             }
             // recreate from store
